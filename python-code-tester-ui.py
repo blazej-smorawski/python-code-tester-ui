@@ -14,9 +14,16 @@ st.markdown("# python-code-tester-ui")
 
 c1, c2 = st.columns([2,3])
 
+with open('./test_code.py') as f:
+   c1.download_button('Download example code', f)
+
+with open('./test_cases.csv') as f:
+   c2.download_button('Download example tests', f)
+
 code_string = ""
 
-code_file = c1.file_uploader("Choose a script to test")
+c1.markdown("### Choose a script to test")
+code_file = c1.file_uploader("Chose a script to test", label_visibility="hidden")
 if code_file is not None:
     # To read file as bytes:
     bytes_data = code_file.getvalue()
@@ -28,7 +35,8 @@ if code_file is not None:
     code_string = stringio.read()
     c1.code(code_string, language="python")
 
-tests_file = c2.file_uploader("Choose a file with test cases")
+c2.markdown("### Choose test cases")
+tests_file = c2.file_uploader("Choose a file with test cases", label_visibility="hidden")
 if tests_file is not None:
     df = pd.read_csv(tests_file, names=["Input","Expected Output"])  
 
@@ -61,9 +69,9 @@ if code_ran:
 
     def highlight(s):
         if s.Passed == 1:
-            return ['background-color: green'] * len(s)
+            return ['background-color: mediumseagreen'] * len(s)
         else:
-            return ['background-color: red'] * len(s)
+            return ['background-color: tomato'] * len(s)
 
 
     c2.write(df.style.apply(highlight, axis=1))
