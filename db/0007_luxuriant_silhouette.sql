@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "username" varchar DEFAULT 'konkurs' NOT NULL;
