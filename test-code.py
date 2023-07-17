@@ -3,13 +3,12 @@ import requests
 import streamlit as st
 from code_editor import code_editor
 
-from utils.database import run_query
-
 st.set_page_config(
     page_title="test-code",
     layout="wide"
 )
 
+from utils.database import run_query
 
 # Improve page layout
 hide_streamlit_style = """
