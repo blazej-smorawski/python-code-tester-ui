@@ -104,3 +104,7 @@ with training:
                         input_col.code(testcase[2].replace('\\n', '\n'))
                         output_col.write("Wyjście programu")
                         output_col.code(result['run']['stdout'])
+
+                        if result['run']['stderr'] != "":
+                            st.write("Błędy wykonania programu:")
+                            st.code(result['run']['stderr'])
