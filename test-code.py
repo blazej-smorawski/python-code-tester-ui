@@ -93,7 +93,14 @@ with training:
                         #st.write(req.status_code)
                         #st.write(req.json())
                         result = req.json()
+                        
                         if req.status_code == 200 and result['run']['code'] == 0 and re.match(testcase[3].replace('\\n', '\n'), result['run']['stdout']):
-                            st.success(f"{testcase[2]} ➜ {result['run']['stdout']}", icon="✅")
+                            st.success(f"Test zaliczony", icon="✅")
                         else:
-                            st.error(f"{testcase[2]} ➜ {result['run']['stdout']}", icon="❌")
+                            st.error(f"Test niezaliczony", icon="❌")
+
+                        input_col, output_col= st.columns([3,3])
+                        input_col.write("Wejście programu")
+                        input_col.code(testcase[2].replace('\\n', '\n'))
+                        output_col.write("Wyjście programu")
+                        output_col.code(result['run']['stdout'])
