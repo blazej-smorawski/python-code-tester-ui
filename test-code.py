@@ -1,5 +1,7 @@
+import psycopg2
 import re
 import requests
+import streamlit as st
 import streamlit as st
 from code_editor import code_editor
 
@@ -8,7 +10,21 @@ st.set_page_config(
     layout="wide"
 )
 
-from utils.database import run_query
+# Initialize connection.
+# Uses st.cache_resource to only run once.
+@st.cache_resource
+def init_connection():
+    return psycopg2.connect(**st.secrets["postgres"])
+
+conn = init_connection()
+
+# Perform query.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def run_query(query, *args):
+    with conn.cursor() as cur:
+        cur.execute(query, args)
+        return cur.fetchall()
 
 # Improve page layout
 hide_streamlit_style = """
