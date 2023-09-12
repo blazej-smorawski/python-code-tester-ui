@@ -12,7 +12,7 @@ st.set_page_config(
 
 # Initialize connection.
 # Uses st.cache_resource to only run once.
-@st.cache_resource
+@st.cache_resource(ttl=3600)
 def init_connection():
     return psycopg2.connect(**st.secrets["postgres"])
 
