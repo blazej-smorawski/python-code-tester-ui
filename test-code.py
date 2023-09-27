@@ -1,30 +1,14 @@
-import psycopg2
-import re
-import requests
 import streamlit as st
 import streamlit as st
 from code_editor import code_editor
+
+from utils.database import get_data
+from utils.runner import run_code
 
 st.set_page_config(
     page_title="test-code",
     layout="wide"
 )
-
-# Initialize connection.
-# Uses st.cache_resource to only run once.
-@st.cache_resource(ttl=3600)
-def init_connection():
-    return psycopg2.connect(**st.secrets["postgres"])
-
-conn = init_connection()
-
-# Perform query.
-# Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
-def run_query(query, *args):
-    with conn.cursor() as cur:
-        cur.execute(query, args)
-        return cur.fetchall()
 
 # Improve page layout
 hide_streamlit_style = """
@@ -51,31 +35,30 @@ with main:
         Konkurs jest darmowy. Udział mogą wziąć wszystkie szkoły prywatne i publiczne z województwa pomorskiego.
     ''')
 
+
 with training:
-    groups = run_query('SELECT * FROM "group"')
-    groups_names = [group[1] for group in groups]
+    groups = get_data("editions")
+    groups_names = [group["name"] for group in groups]
     tabs = st.tabs(groups_names)
-    # Add tab and key to each group
-    groups = [(*element[0], element[1])
-              for element in zip(groups, tabs)]
+    # Add tab
+    for element in zip(groups, tabs):
+        element[0]["tab"] = element[1]
 
     # Editions
     for group in groups:
-        with group[2]:
-            tasks = run_query(
-                'SELECT * FROM "tasks" WHERE "group_id" = %s', (group[0]))
+        with group["tab"]:
+            tasks = get_data("tasks", {"edition": {"$eq": group["name"]}})
 
             col1, col2 = st.columns([1, 2])
             with col1:
                 task_name = st.selectbox(
-                    'Wybierz zadanie', [task[1] for task in tasks], label_visibility="hidden")
-
-                task = next(filter(lambda x: x[1] == task_name, tasks))
+                    'Wybierz zadanie', [task["name"] for task in tasks], label_visibility="hidden")
+                task = next(filter(lambda x: x["name"] == task_name, tasks))
                 st.markdown(f"### {task_name}")
-                st.write(task[3])
+                st.write(task["description"])
 
             with col2:
-                code = "print(1)"
+                code = task["initial-code"]
                 editor_buttons = [{
                     "name": "Uruchom",
                     "feather": "Play",
@@ -86,41 +69,7 @@ with training:
                     "style": {"bottom": "0.44rem", "right": "0.4rem"}
                 }]
                 editor_response = code_editor(
-                    code, key=group[1]+"_editor", height=[10, 20], buttons=editor_buttons)
+                    code, key=group["name"]+task["name"]+"_editor", height=[10, 20], buttons=editor_buttons)
 
                 if editor_response['type'] == "submit":
-                    testcases = run_query(
-                        'SELECT * FROM "testcase" WHERE "taskId" = %s', (task[0]))
-                    
-                    for testcase in testcases:
-                        url = 'https://piston-dev.kubernetes.blazej-smorawski.com/api/v2/execute'
-                        payload = {
-                            "language": "python",
-                            "version": "3.10.0",
-                            "files": [
-                                {
-                                    "name": "code.py",
-                                    "content": editor_response['text']
-                                }
-                            ],
-                            "stdin": testcase[2].replace('\\n', '\n') # Replace \\n with \n
-                        }
-                        req = requests.post(url, json=payload)
-                        #st.write(req.status_code)
-                        #st.write(req.json())
-                        result = req.json()
-                        
-                        if req.status_code == 200 and result['run']['code'] == 0 and re.match(testcase[3].replace('\\n', '\n'), result['run']['stdout']):
-                            st.success(f"Test zaliczony", icon="✅")
-                        else:
-                            st.error(f"Test niezaliczony", icon="❌")
-
-                        input_col, output_col= st.columns([3,3])
-                        input_col.write("Wejście programu")
-                        input_col.code(testcase[2].replace('\\n', '\n'))
-                        output_col.write("Wyjście programu")
-                        output_col.code(result['run']['stdout'])
-
-                        if result['run']['stderr'] != "":
-                            st.write("Błędy wykonania programu:")
-                            st.code(result['run']['stderr'])
+                    run_code(task, editor_response["text"])
