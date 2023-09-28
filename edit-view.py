@@ -1,14 +1,15 @@
-import pandas as pd
-from utils.database import get_data, insert_data
 import streamlit as st
-from code_editor import code_editor
-
-from utils.runner import run_code
 
 st.set_page_config(
     page_title="test-code",
     layout="wide"
 )
+
+import pandas as pd
+from utils.database import get_data, insert_data
+
+from code_editor import code_editor
+from utils.runner import run_code
 
 
 # Improve page layout
@@ -27,8 +28,8 @@ with col1:
     task = {}
     task["name"] = st.text_input('Nazwa', 'Czarna magia')
     task["edition"] = st.text_input('Edycja', 'Python 2023')
-    task["initial-code"] = st.text_input('Kod początkowy', 'print(1)')
-    task["description"] = st.text_input('Opis', 'Magikuj')
+    task["initial-code"] = st.text_area('Kod początkowy', 'print(1)')
+    task["description"] = st.text_area('Opis', 'Magikuj')
     st.markdown(task["description"])
 
     df = pd.DataFrame(
@@ -36,7 +37,7 @@ with col1:
             {"input": "2\\n2", "output": "4", },
         ]
     )
-    edited_df = st.experimental_data_editor(
+    edited_df = st.data_editor(
         df, num_rows="dynamic", use_container_width=True)
 
     # try:
