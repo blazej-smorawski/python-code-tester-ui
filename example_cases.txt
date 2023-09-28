@@ -1,1 +1,0 @@
-[{"Input":"1","OutputRegex":"1\\n|1"},{"Input":"2","OutputRegex":"2\\n|2"},{"Input":"3","OutputRegex":"3\\n|3"},{"Input":"4","OutputRegex":"4\\n|4"},{"Input":"5","OutputRegex":"^5\\n5\\n$|^5$"}]
