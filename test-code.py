@@ -51,7 +51,7 @@ with training:
             col1, col2 = st.columns([1, 2])
             with col1:
                 task_name = st.selectbox(
-                    'Wybierz zadanie', [task["name"] for task in tasks], label_visibility="hidden")
+                    'Wybierz zadanie', [task["name"] for task in tasks], label_visibility="collapsed")
                 task = next(filter(lambda x: x["name"] == task_name, tasks))
                 st.markdown(f"### {task_name}")
                 st.write(task["description"])
@@ -65,7 +65,8 @@ with training:
                     "hasText": True,
                     "showWithIcon": True,
                     "commands": ["submit"],
-                    "style": {"bottom": "0.44rem", "right": "0.4rem"}
+                    "style": {"bottom": "0.44rem", "right": "0.4rem"},
+                    "alwaysOn": True
                 }]
                 editor_response = code_editor(
                     code, key=group["name"]+task["name"]+"_editor", height=[10, 20], buttons=editor_buttons)
