@@ -11,7 +11,7 @@ client = init_connection()
 
 # Pull data from the collection.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=60)
 def get_data(collection: str, query = None):
     db = client["python-konkurs"]
 
