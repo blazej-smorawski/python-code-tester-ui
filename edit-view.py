@@ -124,6 +124,7 @@ with col1:
             task = st.session_state.task
 
     if st.button("Wyślij", type="primary"):
+        del task["_id"]
         insert_data("tasks", task)
 
 
