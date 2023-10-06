@@ -36,7 +36,7 @@ with main:
 
 
 with training:
-    groups = get_data("editions")
+    groups = get_data("editions", {"public": {"$eq": True}})
     groups_names = [group["name"] for group in groups]
     tabs = st.tabs(groups_names)
     # Add tab
