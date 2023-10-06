@@ -1,3 +1,4 @@
 streamlit
 streamlit-code-editor
 pymongo
+pyyaml
