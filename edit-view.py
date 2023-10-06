@@ -44,7 +44,7 @@ with col1:
     database, form, json_editor, yaml_editor = st.tabs(
         ['Wybierz z bazy', 'Formularz', 'JSON', 'YAML'])
     with database:
-        groups = get_data("editions", {"public": {"$eq": True}})
+        groups = get_data("editions")
         group_name = st.selectbox(
                     'Wybierz edycję', [group['name'] for group in groups], label_visibility="collapsed")
 
