@@ -23,7 +23,9 @@ def get_data(collection: str, query = None):
     items = list(items)
     return items
 
-def insert_data(collection: str, dict):
+def insert_data(collection: str, dict, keep_id=False):
     db = client["python-konkurs"]
     result = db[collection].insert_one(dict)
+    if not keep_id:
+        del dict['_id']
     return result.inserted_id

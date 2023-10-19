@@ -124,8 +124,6 @@ with col1:
             task = st.session_state.task
 
     if st.button("Wyślij", type="primary"):
-        if "_id" in task.keys():
-            del task["_id"]
         insert_data("tasks", task)
 
 
@@ -143,6 +141,7 @@ with col2:
         "style": {"bottom": "0.44rem", "right": "0.4rem"},
         "alwaysOn": True
     }]
+
     editor_response = code_editor(
         code, key=str(hash(json.dumps(task, sort_keys=True)))+"_editor", height=[10, 20], buttons=editor_buttons)
 
