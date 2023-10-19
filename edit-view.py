@@ -120,11 +120,12 @@ with col1:
             code, lang="yaml", key=str(hash(json.dumps(task, sort_keys=True)))+"_yaml_editor", height=20, buttons=editor_buttons)
 
         if editor_response['type'] == "submit":
-            st.session_state.task = yaml.load(editor_response['text'])
+            st.session_state.task = yaml.load(editor_response['text'], Loader=yaml.FullLoader)
             task = st.session_state.task
 
     if st.button("Wyślij", type="primary"):
-        del task["_id"]
+        if "_id" in task.keys():
+            del task["_id"]
         insert_data("tasks", task)
 
 
