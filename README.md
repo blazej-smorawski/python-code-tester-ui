@@ -5,5 +5,6 @@ Frontend for testing code using [python-code-tester](https://github.com/blazej-s
 ### Usage
 
 ```bash
-python -m streamlit run 1_✔️_test-code.py
+pip install -r requirements.txt
+python -m streamlit run test-code.py
 ```
