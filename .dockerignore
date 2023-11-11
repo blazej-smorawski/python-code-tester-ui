@@ -1,0 +1,8 @@
+.vscode
+secrets.toml
+
+pomorski_czarodziej_components.egg-info
+__pycache__
+env
+build
+node_modules
