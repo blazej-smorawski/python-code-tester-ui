@@ -5,9 +5,12 @@ st.set_page_config(
     layout="wide"
 )
 
-from code_editor import code_editor
-from utils.runner import run_code
 from utils.database import get_data
+from utils.runner import run_code
+from utils.frontpage import render_front_page
+from code_editor import code_editor
+
+_RELEASE = True
 
 # Improve page layout
 hide_streamlit_style = """
@@ -17,23 +20,28 @@ hide_streamlit_style = """
 </style>
 
 """
+
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 main, training, current = st.tabs(
     ['🧙‍♂️ O konkursie', '📚 Zbiór Zadań', '🐍 Python 2024'])
 
 with main:
-    st.markdown("# Pomorski Czarodziej")
-    st.markdown("")
-    st.markdown('''
-        ## Cel konkursu
-        Celem jaki przyświeca nam przy organizacji tego konkursu jest rozwijanie zainteresowań algorytmiką i technologią informatyczną. Zależ nam na popularyzowaniu programowania w klasach szkół podstawowych.
-        Odpowiadamy na propozycję zmian w podstawie programowej wprowadzającą elementy programowania od najmłodszych lat.
-        Konkurs ma sprzyjać rozwojowi uzdolnień i zainteresowań, pobudzać do twórczego myślenia, wspomagać zdolności stosowania zdobytej wiedzy w praktyce oraz docelowo przyczynić się do lepszego przygotowania uczniów do nauki w szkołach wyższego stopnia.
-        Chcemy pokazać, że używając powszechnie bardzo popularnego języka programowania jakim jest Python, można zaszczepiać koncepty programistyczne już w szkole podstawowej.
-        Konkurs jest darmowy. Udział mogą wziąć wszystkie szkoły prywatne i publiczne z województwa pomorskiego.
-    ''')
+    _, center, _ = st.columns([1, 5, 1])
+    with center:
+        render_front_page(_RELEASE)
 
+        st.markdown('''
+            ## Regulamin
+            Regulamin konkursu na rok 2024 możesz ściągnąć klikając w poniższy przycisk
+        ''')
+
+        with open("docs/Pomorski Czarodziej 2024 - Regulamin.pdf", "rb") as file:
+            st.download_button(
+                label="Regulamin konkursu",
+                data=file,
+                file_name='Pomorski Czarodziej 2024 - Regulamin.pdf',
+                mime='application/pdf')
 
 with training:
     groups = get_data("editions", {"public": {"$eq": True}})

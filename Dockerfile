@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM nikolaik/python-nodejs:python3.11-nodejs18-slim
 
 WORKDIR /app
 
@@ -12,9 +12,14 @@ RUN apt-get update && apt-get install -y \
 COPY test-code.py /app/test-code.py
 COPY edit-view.py /app/edit-view.py
 COPY requirements.txt /app/requirements.txt
+COPY build_deps.sh /app/build_deps.sh
 COPY utils/* /app/utils/
+COPY deps/ /app/deps/
+COPY static/* /app/static/
+COPY docs/* /app/docs/
 
 RUN pip3 install -r requirements.txt
+RUN ./build_deps.sh
 
 EXPOSE 8501
 
