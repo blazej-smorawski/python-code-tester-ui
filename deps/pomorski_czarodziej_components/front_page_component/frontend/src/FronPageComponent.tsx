@@ -17,6 +17,10 @@ class FrontPageComponent extends StreamlitComponentBase<State> {
 
   public render = (): JSX.Element => {
     const { theme } = this.props
+    let images = this.props.args["images"];
+    var origin = (window.location != window.parent.location)
+            ? document.referrer
+            : document.location.href; 
 
     const cardStyle: any = {
       width: '100%',
@@ -109,16 +113,16 @@ class FrontPageComponent extends StreamlitComponentBase<State> {
               </div>
               <div style={imageColumnStyle}>
                 <reveal.Fade right cascade>
-                <img src="https://pomorskiczarodziej.pl/images/pic01.jpg" alt="Image 1" style={imageStyle} />
-                <img src="https://pomorskiczarodziej.pl/images/pic02.jpg" alt="Image 2" style={imageStyle} />
-                <img src="https://pomorskiczarodziej.pl/images/pic03.jpg" alt="Image 3" style={imageStyle} />
+                <img src={origin + images[0]} alt="Image 1" style={imageStyle} />
+                <img src={origin + images[1]} alt="Image 2" style={imageStyle} />
+                <img src={origin + images[2]} alt="Image 3" style={imageStyle} />
                 </reveal.Fade>
               </div>
               <div style={imageColumnStyle}>
                 <reveal.Fade right cascade>
-                  <img src="https://pomorskiczarodziej.pl/images/pic04.jpg" alt="Image 4" style={imageStyle} />
-                  <img src="https://pomorskiczarodziej.pl/images/pic05.jpg" alt="Image 5" style={imageStyle} />
-                  <img src="https://pomorskiczarodziej.pl/images/pic06.jpg" alt="Image 6" style={imageStyle} />
+                  <img src={origin + images[3]} alt="Image 4" style={imageStyle} />
+                  <img src={origin + images[4]} alt="Image 5" style={imageStyle} />
+                  <img src={origin + images[5]} alt="Image 6" style={imageStyle} />
                 </reveal.Fade>
               </div>
             </div>

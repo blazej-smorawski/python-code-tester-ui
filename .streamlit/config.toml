@@ -7,4 +7,5 @@ primaryColor="#286ae6"
 backgroundColor="#192d56"
 secondaryBackgroundColor="#286ae6"
 
-
+[server]
+enableStaticServing = true

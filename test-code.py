@@ -5,10 +5,12 @@ st.set_page_config(
     layout="wide"
 )
 
-from code_editor import code_editor
-from utils.runner import run_code
 from utils.database import get_data
-from PIL import Image
+from utils.runner import run_code
+from utils.frontpage import render_front_page
+from code_editor import code_editor
+
+_RELEASE = True
 
 # Improve page layout
 hide_streamlit_style = """
@@ -25,25 +27,21 @@ main, training, current = st.tabs(
     ['🧙‍♂️ O konkursie', '📚 Zbiór Zadań', '🐍 Python 2024'])
 
 with main:
-    _, center, _ = st.columns([1,5,1])
+    _, center, _ = st.columns([1, 5, 1])
     with center:
-        try:
-            from deps.pomorski_czarodziej_components import front_page_component
-            front_page_component.front_page_component()
-        except:
-            st.error("Front page could not be loaded!")
+        render_front_page(_RELEASE)
 
         st.markdown('''
             ## Regulamin
             Regulamin konkursu na rok 2024 możesz ściągnąć klikając w poniższy przycisk
         ''')
-    
+
         with open("docs/Pomorski Czarodziej 2024 - Regulamin.pdf", "rb") as file:
             st.download_button(
                 label="Regulamin konkursu",
                 data=file,
                 file_name='Pomorski Czarodziej 2024 - Regulamin.pdf',
-                mime='application/pdf')    
+                mime='application/pdf')
 
 with training:
     groups = get_data("editions", {"public": {"$eq": True}})
