@@ -2,7 +2,30 @@ import re
 import requests
 import streamlit as st
 
-def run_code(task, code):
+def run_code(code, stdin):
+    url = 'https://piston-dev.kubernetes.blazej-smorawski.com/api/v2/execute'
+    payload = {
+        "language": "python",
+        "version": "3.10.0",
+        "files": [
+            {
+                "name": "code.py",
+                "content": code
+            }
+        ],
+        "stdin": stdin
+    }
+    req = requests.post(url, json=payload)
+    result = req.json()
+
+    st.write("Wyjście programu")
+    st.code(result['run']['stdout'])
+
+    if result['run']['stderr'] != "":
+        st.write("Błędy wykonania programu:")
+        st.code(result['run']['stderr'])
+
+def test_code(task, code):
     testcases = task["test-cases"]
 
     try:

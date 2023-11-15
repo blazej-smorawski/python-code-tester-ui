@@ -1,4 +1,5 @@
 import streamlit as st
+import utils.cheatsheet as tips
 
 st.set_page_config(
     page_title="test-code",
@@ -6,7 +7,7 @@ st.set_page_config(
 )
 
 from utils.database import get_data
-from utils.runner import run_code
+from utils.runner import run_code, test_code
 from utils.frontpage import render_front_page
 from code_editor import code_editor
 
@@ -23,8 +24,8 @@ hide_streamlit_style = """
 
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-main, training, current = st.tabs(
-    ['🧙‍♂️ O konkursie', '📚 Zbiór Zadań', '🐍 Python 2024'])
+main, training, current, ide = st.tabs(
+    ['🧙‍♂️ O konkursie', '📚 Zbiór Zadań', '🐍 Python 2024', '⌨️ Programuj!'])
 
 with main:
     _, center, _ = st.columns([1, 5, 1])
@@ -80,4 +81,40 @@ with training:
                     code, key=group["name"]+task["name"]+"_editor", height=[10, 20], buttons=editor_buttons)
 
                 if editor_response['type'] == "submit":
-                    run_code(task, editor_response["text"])
+                    test_code(task, editor_response["text"])
+
+with ide:
+    _, center, _ = st.columns([1,6,1])
+    with center:
+        st.markdown("## Powodzenia z Pythonem! 🚀")
+        st.write("Wejście programu")
+        stdin = st.text_area('Wejście programu', label_visibility='collapsed', help="Naciśnij ctrl+enter aby zapisać zmiany")
+        editor_buttons = [{
+                        "name": "Uruchom",
+                        "feather": "Play",
+                        "primary": True,
+                        "hasText": True,
+                        "showWithIcon": True,
+                        "commands": ["submit"],
+                        "style": {"bottom": "0.44rem", "right": "0.4rem"},
+                        "alwaysOn": True
+                    }]
+        editor_response = code_editor(
+            code, key="_ide_editor", height=[10, 20], buttons=editor_buttons)
+
+        if editor_response['type'] == "submit":
+            run_code(editor_response["text"], stdin)
+
+        st.markdown("## Ściąga")
+        one, two, three = st.columns([1,1,1])
+        with one:
+            st.markdown(tips.tip_variables())
+            st.markdown(tips.tip_maths())
+
+        with two:
+            st.markdown(tips.tip_lists())
+            st.markdown(tips.tip_loops())
+
+        with three:
+            st.markdown(tips.tip_ifs())
+            st.markdown(tips.tip_functions())

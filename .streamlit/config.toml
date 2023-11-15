@@ -5,7 +5,7 @@ hideTopBar = true
 base="dark"
 primaryColor="#286ae6"
 backgroundColor="#192d56"
-secondaryBackgroundColor="#286ae6"
+secondaryBackgroundColor="#234979"
 
 [server]
 enableStaticServing = true

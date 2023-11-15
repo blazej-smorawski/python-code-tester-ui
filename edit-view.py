@@ -8,7 +8,7 @@ st.set_page_config(
 import json
 
 import yaml
-from utils.runner import run_code
+from utils.runner import test_code
 from code_editor import code_editor
 from utils.database import get_data, insert_data
 import pandas as pd
@@ -146,4 +146,4 @@ with col2:
         code, key=str(hash(json.dumps(task, sort_keys=True)))+"_editor", height=[10, 20], buttons=editor_buttons)
 
     if editor_response['type'] == "submit":
-        run_code(task, editor_response["text"])
+        test_code(task, editor_response["text"])
