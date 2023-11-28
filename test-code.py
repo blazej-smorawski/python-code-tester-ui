@@ -2,7 +2,7 @@ import streamlit as st
 import utils.cheatsheet as tips
 
 st.set_page_config(
-    page_title="test-code",
+    page_title="🧙‍♂️ Pomorski Czarodziej",
     layout="wide"
 )
 
