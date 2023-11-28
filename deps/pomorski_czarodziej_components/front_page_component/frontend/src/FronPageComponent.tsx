@@ -3,6 +3,8 @@ import {
   withStreamlitConnection,
 } from "streamlit-component-lib"
 import React from "react"
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 // The library does not provide @types
 const reveal = require('react-reveal');
@@ -19,8 +21,8 @@ class FrontPageComponent extends StreamlitComponentBase<State> {
     const { theme } = this.props
     let images = this.props.args["images"];
     var origin = (window.location != window.parent.location)
-            ? document.referrer
-            : document.location.href; 
+      ? document.referrer
+      : document.location.href;
 
     const cardStyle: any = {
       width: '100%',
@@ -34,22 +36,8 @@ class FrontPageComponent extends StreamlitComponentBase<State> {
       flexDirection: 'column',
     };
 
-    const containerStyle: any = {
-      display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr',
-      gridGap: '20px',
-    };
-
-    const textColumnStyle: any = {
-      gridColumn: '1 / 2', // Span the first column
-    };
-
-    const imageColumnStyle: any = {
-      display: 'flex',
-      flexDirection: 'column',
-    };
-
     const imageStyle: any = {
+      border:  theme ? `0.125rem solid ${theme.primaryColor}` : '0.125rem solid #000',
       width: '100%',
       marginBottom: '20px',
       borderRadius: '2vw',
@@ -91,46 +79,48 @@ class FrontPageComponent extends StreamlitComponentBase<State> {
           </div>
         </reveal.Fade>
 
-        <reveal.Fade right big cascade delay={1100}>
+        <reveal.Fade right big cascade delay={1000}>
           <div style={dividerStyle}></div>
         </reveal.Fade>
 
-        <reveal.Fade right big delay={2000}>
-          <div style={cardStyle}>
-            <div style={containerStyle}>
-              <div style={textColumnStyle}>
-                <h2>Historia konkursu</h2>
-                <p style={{}}>
-                  Konkurs programowania dla szkół podstawowych organizujemy wspólnie z nauczycielami od 2010 roku. W pierwszej, kameralnej edycji uczestniczyły jedynie 4 szkoły.
-                  Na przestrzeni lat konkurs zyskiwał coraz większą popularności i bywało, że udział brała nawet ponad setka dzieci z prawie dwudziestu pomorskich szkół.
-                  Podczas poprzednich edycji aktywnie współpracowaliśmy z Kuratorium Oświaty w Gdańsku. Od 2022 zmieniamy formułę konkursu, wychodząc naprzeciw nowym trendom na rynku i zmianą programowym.
-                  Stosowany do tej pory Baltiee zastępujemy językiem Python.
-                </p>
-                <p style={{}}>
-                  Już tradycją stało się, że gala finałowa konkursu oraz wręczenie nagród odbywa się w siedzibie firmy Intel Technology Poland, gdzie pokazujemy, jak wygląda praca programisty komputerowego,
-                  oprowadzamy uczestników po biurze oraz przeprowadzamy krótkie lekcje związane z technologią informacyjną.
-                </p>
-              </div>
-              <div style={imageColumnStyle}>
-                <reveal.Fade right cascade>
+        <reveal.Fade right big delay={1000}>
+          <Row>
+            <Col xm="12" lg="4">
+              <h2>Historia konkursu</h2>
+              <p style={{}}>
+                Konkurs programowania dla szkół podstawowych organizujemy wspólnie z nauczycielami od 2010 roku. W pierwszej, kameralnej edycji uczestniczyły jedynie 4 szkoły.
+                Na przestrzeni lat konkurs zyskiwał coraz większą popularności i bywało, że udział brała nawet ponad setka dzieci z prawie dwudziestu pomorskich szkół.
+                Podczas poprzednich edycji aktywnie współpracowaliśmy z Kuratorium Oświaty w Gdańsku. Od 2022 zmieniamy formułę konkursu, wychodząc naprzeciw nowym trendom na rynku i zmianą programowym.
+                Stosowany do tej pory Baltiee zastępujemy językiem Python.
+              </p>
+              <p style={{}}>
+                Już tradycją stało się, że gala finałowa konkursu oraz wręczenie nagród odbywa się w siedzibie firmy Intel Technology Poland, gdzie pokazujemy, jak wygląda praca programisty komputerowego,
+                oprowadzamy uczestników po biurze oraz przeprowadzamy krótkie lekcje związane z technologią informacyjną.
+              </p>
+            </Col>
+            <Col xm="12" lg="4">
+              <reveal.Fade right cascade>
                 <img src={origin + images[0]} alt="Image 1" style={imageStyle} />
                 <img src={origin + images[1]} alt="Image 2" style={imageStyle} />
-                <img src={origin + images[2]} alt="Image 3" style={imageStyle} />
-                </reveal.Fade>
-              </div>
-              <div style={imageColumnStyle}>
-                <reveal.Fade right cascade>
-                  <img src={origin + images[3]} alt="Image 4" style={imageStyle} />
-                  <img src={origin + images[4]} alt="Image 5" style={imageStyle} />
-                  <img src={origin + images[5]} alt="Image 6" style={imageStyle} />
-                </reveal.Fade>
-              </div>
-            </div>
-          </div>
+                {/* <img src={origin + images[2]} alt="Image 3" style={imageStyle} /> */}
+              </reveal.Fade>
+            </Col>
+            <Col xm="12" lg="4">
+              <reveal.Fade right cascade>
+                <img src={origin + images[3]} alt="Image 4" style={imageStyle} />
+                <img src={origin + images[4]} alt="Image 5" style={imageStyle} />
+                {/* <img src={origin + images[5]} alt="Image 6" style={imageStyle} /> */}
+              </reveal.Fade>
+            </Col>
+          </Row>
         </reveal.Fade>
 
-        <reveal.Fade right big cascade delay={2100}>
+        <reveal.Fade right big cascade delay={1000}>
           <div style={dividerStyle}></div>
+        </reveal.Fade>
+
+        <reveal.Fade right big delay={1000}>
+          <h2> ⌨️ Programuj! </h2>
         </reveal.Fade>
       </div>
     )

@@ -6,10 +6,10 @@ st.set_page_config(
     layout="wide"
 )
 
-from utils.database import get_data
-from utils.runner import run_code, test_code
-from utils.frontpage import render_front_page
 from code_editor import code_editor
+from utils.frontpage import render_front_page
+from utils.runner import run_code, test_code
+from utils.database import get_data
 
 _RELEASE = True
 
@@ -24,13 +24,32 @@ hide_streamlit_style = """
 
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-main, training, current, ide = st.tabs(
-    ['🧙‍♂️ O konkursie', '📚 Zbiór Zadań', '🐍 Python 2024', '⌨️ Programuj!'])
+main, training, ide = st.tabs(
+    ['🧙‍♂️ O konkursie', '📚 Zbiór Zadań', '⌨️ Programuj!'])
 
 with main:
     _, center, _ = st.columns([1, 5, 1])
     with center:
         render_front_page(_RELEASE)
+
+        st.markdown(
+            "Zapraszamy do korzystania z naszego edytora Python w sekcji '⌨️ Programuj!', gdzie możesz dać upust swojej kreatywności kodowania!")
+
+        editor_buttons = [{
+            "name": "Uruchom",
+            "feather": "Play",
+            "primary": True,
+            "hasText": True,
+            "showWithIcon": True,
+            "commands": ["submit"],
+            "style": {"bottom": "0.44rem", "right": "0.4rem"},
+            "alwaysOn": True
+        }]
+        editor_response = code_editor(
+            "print('Hello world!🌎')", key="_frontpage_editor", height=[10, 20], buttons=editor_buttons)
+
+        if editor_response['type'] == "submit":
+            run_code(editor_response["text"], "")
 
         st.markdown('''
             ## Regulamin
@@ -84,21 +103,22 @@ with training:
                     test_code(task, editor_response["text"])
 
 with ide:
-    _, center, _ = st.columns([1,6,1])
+    _, center, _ = st.columns([1, 6, 1])
     with center:
         st.markdown("## Powodzenia z Pythonem! 🚀")
         st.write("Wejście programu")
-        stdin = st.text_area('Wejście programu', label_visibility='collapsed', help="Naciśnij ctrl+enter aby zapisać zmiany")
+        stdin = st.text_area('Wejście programu', label_visibility='collapsed',
+                             help="Naciśnij ctrl+enter aby zapisać zmiany")
         editor_buttons = [{
-                        "name": "Uruchom",
-                        "feather": "Play",
-                        "primary": True,
-                        "hasText": True,
-                        "showWithIcon": True,
-                        "commands": ["submit"],
-                        "style": {"bottom": "0.44rem", "right": "0.4rem"},
-                        "alwaysOn": True
-                    }]
+            "name": "Uruchom",
+            "feather": "Play",
+            "primary": True,
+            "hasText": True,
+            "showWithIcon": True,
+            "commands": ["submit"],
+            "style": {"bottom": "0.44rem", "right": "0.4rem"},
+            "alwaysOn": True
+        }]
         editor_response = code_editor(
             code, key="_ide_editor", height=[10, 20], buttons=editor_buttons)
 
@@ -106,7 +126,7 @@ with ide:
             run_code(editor_response["text"], stdin)
 
         st.markdown("## Ściąga")
-        one, two, three = st.columns([1,1,1])
+        one, two, three = st.columns([1, 1, 1])
         with one:
             st.markdown(tips.tip_variables())
             st.markdown(tips.tip_maths())
