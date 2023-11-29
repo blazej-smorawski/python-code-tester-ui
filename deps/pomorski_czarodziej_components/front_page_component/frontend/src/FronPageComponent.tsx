@@ -85,7 +85,7 @@ class FrontPageComponent extends StreamlitComponentBase<State> {
 
         <reveal.Fade right big delay={1000}>
           <Row>
-            <Col xm="12" lg="4">
+            <Col xm="12" sm="4">
               <h2>Historia konkursu</h2>
               <p style={{}}>
                 Konkurs programowania dla szkół podstawowych organizujemy wspólnie z nauczycielami od 2010 roku. W pierwszej, kameralnej edycji uczestniczyły jedynie 4 szkoły.
@@ -98,14 +98,14 @@ class FrontPageComponent extends StreamlitComponentBase<State> {
                 oprowadzamy uczestników po biurze oraz przeprowadzamy krótkie lekcje związane z technologią informacyjną.
               </p>
             </Col>
-            <Col xm="12" lg="4">
+            <Col xm="12" sm="4">
               <reveal.Fade right cascade>
                 <img src={origin + images[0]} alt="Image 1" style={imageStyle} />
                 <img src={origin + images[1]} alt="Image 2" style={imageStyle} />
                 {/* <img src={origin + images[2]} alt="Image 3" style={imageStyle} /> */}
               </reveal.Fade>
             </Col>
-            <Col xm="12" lg="4">
+            <Col xm="12" sm="4">
               <reveal.Fade right cascade>
                 <img src={origin + images[3]} alt="Image 4" style={imageStyle} />
                 <img src={origin + images[4]} alt="Image 5" style={imageStyle} />

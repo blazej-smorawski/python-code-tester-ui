@@ -2,8 +2,9 @@ import streamlit as st
 import utils.cheatsheet as tips
 
 st.set_page_config(
-    page_title="🧙‍♂️ Pomorski Czarodziej",
-    layout="wide"
+    page_title="Pomorski Czarodziej",
+    layout="wide",
+    page_icon="🧙‍♂️"
 )
 
 from code_editor import code_editor
