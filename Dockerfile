@@ -21,6 +21,9 @@ COPY docs/* /app/docs/
 RUN pip3 install -r requirements.txt
 RUN ./build_deps.sh
 
+COPY index.html /usr/local/lib/python3.11/site-packages/streamlit/static/index.html
+COPY favicon.png /usr/local/lib/python3.11/site-packages/streamlit/static/favicon.png
+
 EXPOSE 8501
 
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
