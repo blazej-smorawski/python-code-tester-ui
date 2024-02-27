@@ -25,8 +25,8 @@ hide_streamlit_style = """
 
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-main, training, ide = st.tabs(
-    ['🧙‍♂️ O konkursie', '📚 Zbiór Zadań', '⌨️ Programuj!'])
+main, training, ide, competition = st.tabs(
+    ['🧙‍♂️ O konkursie', '📚 Zbiór Zadań', '⌨️ Programuj!', '📝 Konkurs!'])
 
 with main:
     _, center, _ = st.columns([1, 5, 1])
@@ -139,3 +139,44 @@ with ide:
         with three:
             st.markdown(tips.tip_ifs())
             st.markdown(tips.tip_functions())
+
+with competition:
+    groups = get_data("editions", {"name": {"$eq": "Python 2024"}})
+    group = groups[0]
+
+    tasks = get_data("tasks", {"edition": {"$eq": group["name"]}})
+    seen_names = set()
+    filtered_tasks = []
+    for task in tasks:
+        if task["name"] not in seen_names:
+            filtered_tasks.append(task)
+            seen_names.add(task["name"])
+
+    number = 1
+    for task in filtered_tasks:
+        task_name = task["name"]
+        st.markdown(f"### {number}. {task_name}")
+        number += 1
+
+        col1, col2 = st.columns([1, 2])
+        with col1:
+            task_description = st.container(height=500)
+            task_description.write(task["description"])
+
+        with col2:
+            code = task["initial-code"]
+            editor_buttons = [{
+                "name": "Uruchom",
+                "feather": "Play",
+                "primary": True,
+                "hasText": True,
+                "showWithIcon": True,
+                "commands": ["submit"],
+                "style": {"bottom": "0.44rem", "right": "0.4rem"},
+                "alwaysOn": True
+            }]
+            editor_response = code_editor(
+                code, key=group["name"]+task["name"]+"_editor", height="500px", buttons=editor_buttons)
+
+            if editor_response['type'] == "submit":
+                test_code(task, editor_response["text"])
