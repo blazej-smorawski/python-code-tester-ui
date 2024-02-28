@@ -1,3 +1,4 @@
+import json
 import streamlit as st
 import utils.cheatsheet as tips
 
@@ -9,7 +10,7 @@ st.set_page_config(
 
 from code_editor import code_editor
 from utils.frontpage import render_front_page
-from utils.runner import run_code, test_code
+from utils.runner import display_run_result, display_testcase_result, run_code, test_code
 from utils.database import get_data
 
 _RELEASE = True
@@ -50,7 +51,8 @@ with main:
             "print('Hello world!🌎')", key="_frontpage_editor", height=[10, 20], buttons=editor_buttons)
 
         if editor_response['type'] == "submit":
-            run_code(editor_response["text"], "")
+            result = run_code(editor_response["text"], "")
+            display_run_result(result)
 
         st.markdown('''
             ## Regulamin
@@ -101,7 +103,9 @@ with training:
                     code, key=group["name"]+task["name"]+"_editor", height=[10, 20], buttons=editor_buttons)
 
                 if editor_response['type'] == "submit":
-                    test_code(task, editor_response["text"])
+                    results = test_code(task, editor_response["text"])
+                    for result in results:
+                        display_testcase_result(result)
 
 with ide:
     _, center, _ = st.columns([1, 6, 1])
@@ -124,7 +128,8 @@ with ide:
             code, key="_ide_editor", height=[10, 20], buttons=editor_buttons)
 
         if editor_response['type'] == "submit":
-            run_code(editor_response["text"], stdin)
+            result = run_code(editor_response["text"], stdin)
+            display_run_result(result)
 
         st.markdown("## Ściąga")
         one, two, three = st.columns([1, 1, 1])
@@ -141,6 +146,11 @@ with ide:
             st.markdown(tips.tip_functions())
 
 with competition:
+    if 'submission' not in st.session_state:
+        st.session_state['submission'] = {}
+
+    current_submission = st.session_state['submission']
+
     groups = get_data("editions", {"name": {"$eq": "Python 2024"}})
     group = groups[0]
 
@@ -166,8 +176,8 @@ with competition:
         with col2:
             code = task["initial-code"]
             editor_buttons = [{
-                "name": "Uruchom",
-                "feather": "Play",
+                "name": "Zapisz rozwiązanie",
+                "feather": "Save",
                 "primary": True,
                 "hasText": True,
                 "showWithIcon": True,
@@ -179,4 +189,33 @@ with competition:
                 code, key=group["name"]+task["name"]+"_editor", height="500px", buttons=editor_buttons)
 
             if editor_response['type'] == "submit":
-                test_code(task, editor_response["text"])
+                current_submission[task_name] = editor_response["text"]
+                
+                results = test_code(task, editor_response["text"])
+                for result in results:
+                    display_testcase_result(result)
+
+    current_submission
+
+    if st.button("Zgłoś rozwiązanie"):
+        exam = {}
+        exam_results = {}
+        for task in filtered_tasks:
+            task_name = task["name"]
+            code = ""
+            if task_name in current_submission:
+                code = current_submission[task_name]
+
+            results = test_code(task, code, private=True)
+            st.write(len(results))
+            passed_count = sum(1 for res in results if res.get("passed", True))
+            tests_count = len(task["test-cases"])
+
+            exam_results[task_name] = {"result": passed_count/tests_count, "code": code}
+            exam[task_name] = task["description"]
+        exam
+
+        # Might not be stable
+        hash = hash(json.dumps(exam, sort_keys=True))
+        st.write(hash)
+        st.write(exam_results)
