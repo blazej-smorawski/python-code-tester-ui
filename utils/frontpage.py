@@ -1,3 +1,6 @@
+import streamlit as st
+
+
 def render_front_page(release=True):
     try:
         if not release:
