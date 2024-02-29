@@ -9,3 +9,6 @@ secondaryBackgroundColor="#234979"
 
 [server]
 enableStaticServing = true
+
+[client]
+showSidebarNavigation = false
