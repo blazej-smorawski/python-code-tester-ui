@@ -93,10 +93,10 @@ with center:
             insert_data("submissions", {"id": solution_id, "exam_hash": hash, "exam_results": exam_results})
             st.session_state['solution_id'] = solution_id
             st.write("Sukces!")
+        st.success(
+        "Twoje rozwiązanie zostało przyjęte, dziękujemy za udział w konkursie!", icon="✅")
 
     if 'solution_id' in st.session_state:
-        st.success(
-            "Twoje rozwiązanie zostało przyjęte, dziękujemy za udział w konkursie!", icon="✅")
         solution_id = st.session_state['solution_id']
         st.markdown(f'<div style="text-align: center;"><h4>Twój kod:</h1></div>', unsafe_allow_html=True)
         st.markdown(f'<div style="text-align: center;"><h1>{solution_id}</h1></div>', unsafe_allow_html=True)
