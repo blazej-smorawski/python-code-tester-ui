@@ -1,7 +1,8 @@
 import json
+import random
 import streamlit as st
 from code_editor import code_editor
-from utils.database import get_data
+from utils.database import get_data, insert_data
 from utils.navbar import display_navbar
 from utils.runner import display_testcase_result, test_code
 
@@ -31,7 +32,7 @@ for task in filtered_tasks:
 
     col1, col2 = st.columns([1, 2])
     with col1:
-        task_description = st.container(height=500)
+        task_description = st.container()
         task_description.write(task["description"])
 
     with col2:
@@ -55,29 +56,47 @@ for task in filtered_tasks:
             results = test_code(task, editor_response["text"])
             for result in results:
                 display_testcase_result(result)
+    st.divider()
 
-current_submission
+_, center, _ = st.columns([1, 1, 1])
+with center:
+    if st.button("Zgłoś rozwiązanie", use_container_width=True):
+        with st.status("Wysyłam rozwiązanie..."):
+            st.write("Sprawdzam zadania...")
+            exam = {}
+            exam_results = {}
+            for task in filtered_tasks:
+                task_name = task["name"]
+                code = ""
+                if task_name in current_submission:
+                    code = current_submission[task_name]
 
-if st.button("Zgłoś rozwiązanie"):
-    exam = {}
-    exam_results = {}
-    for task in filtered_tasks:
-        task_name = task["name"]
-        code = ""
-        if task_name in current_submission:
-            code = current_submission[task_name]
+                results = test_code(task, code, private=True)
+                passed_count = sum(
+                    1 for res in results if res.get("passed", True))
+                tests_count = len(task["test-cases"])
 
-        results = test_code(task, code, private=True)
-        st.write(len(results))
-        passed_count = sum(1 for res in results if res.get("passed", True))
-        tests_count = len(task["test-cases"])
+                exam_results[task_name] = {
+                    "result": passed_count/tests_count, "code": code}
+                exam[task_name] = task["description"]
 
-        exam_results[task_name] = {
-            "result": passed_count/tests_count, "code": code}
-        exam[task_name] = task["description"]
-    exam
+            st.write("Zapisuję wersję konkursu...")
+            # Might not be stable
+            hash = hash(json.dumps(exam, sort_keys=True))
 
-    # Might not be stable
-    hash = hash(json.dumps(exam, sort_keys=True))
-    st.write(hash)
-    st.write(exam_results)
+            st.write("Zapisuję dane w bazie...")
+            exam_in_db = get_data("exams", {"hash": {"$eq": hash}})
+            if not exam_in_db:
+                insert_data("exams", {"hash": hash, "exam": exam})
+
+            solution_id = random.randint(0, 1e10)
+            insert_data("submissions", {"id": solution_id, "exam_hash": hash, "exam_results": exam_results})
+            st.session_state['solution_id'] = solution_id
+            st.write("Sukces!")
+
+    if 'solution_id' in st.session_state:
+        st.success(
+            "Twoje rozwiązanie zostało przyjęte, dziękujemy za udział w konkursie!", icon="✅")
+        solution_id = st.session_state['solution_id']
+        st.markdown(f'<div style="text-align: center;"><h4>Twój kod:</h1></div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="text-align: center;"><h1>{solution_id}</h1></div>', unsafe_allow_html=True)
