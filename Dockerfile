@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY test-code.py /app/test-code.py
 COPY edit-view.py /app/edit-view.py
+COPY pages/* /app/pages/
 COPY requirements.txt /app/requirements.txt
 COPY build_deps.sh /app/build_deps.sh
 COPY utils/* /app/utils/
