@@ -78,6 +78,7 @@ with col1:
                     {
                         "input": edited_df["input"][index],
                         "output": edited_df["output"][index]
+                        "public": edited_df["public"][index]
                     }
                 )
         except:
