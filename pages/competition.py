@@ -50,17 +50,23 @@ for task in filtered_tasks:
         editor_response = code_editor(
             code, key=group["name"]+task["name"]+"_editor", height="500px", buttons=editor_buttons)
 
+        submission_state_container = st.container()
+
         if editor_response['type'] == "submit":
             current_submission[task_name] = editor_response["text"]
 
             results = test_code(task, editor_response["text"])
             for result in results:
                 display_testcase_result(result)
+
+        if task_name in current_submission:
+            submission_state_container.success(
+                f"Rozwiązanie zapisane. Użyj przycisku *Zgłoś rozwiązanie* na dole strony, aby zakończyć podejście", icon="✅")
     st.divider()
 
 _, center, _ = st.columns([1, 1, 1])
 with center:
-    if st.button("Zgłoś rozwiązanie", use_container_width=True):
+    if st.button("Zgłoś rozwiązanie", use_container_width=True, type="primary"):
         with st.status("Wysyłam rozwiązanie..."):
             st.write("Sprawdzam zadania...")
             exam = {}
@@ -90,13 +96,16 @@ with center:
                 insert_data("exams", {"hash": hash, "exam": exam})
 
             solution_id = random.randint(0, 1e10)
-            insert_data("submissions", {"id": solution_id, "exam_hash": hash, "exam_results": exam_results})
+            insert_data("submissions", {
+                        "id": solution_id, "exam_hash": hash, "exam_results": exam_results})
             st.session_state['solution_id'] = solution_id
             st.write("Sukces!")
         st.success(
-        "Twoje rozwiązanie zostało przyjęte, dziękujemy za udział w konkursie!", icon="✅")
+            "Twoje rozwiązanie zostało przyjęte, dziękujemy za udział w konkursie!", icon="✅")
 
     if 'solution_id' in st.session_state:
         solution_id = st.session_state['solution_id']
-        st.markdown(f'<div style="text-align: center;"><h4>Twój kod:</h1></div>', unsafe_allow_html=True)
-        st.markdown(f'<div style="text-align: center;"><h1>{solution_id}</h1></div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div style="text-align: center;"><h4>Twój kod:</h1></div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div style="text-align: center;"><h1>{solution_id}</h1></div>', unsafe_allow_html=True)
