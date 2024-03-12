@@ -13,7 +13,7 @@ if 'submission' not in st.session_state:
 
 current_submission = st.session_state['submission']
 
-groups = get_data("editions", {"name": {"$eq": "Python 2024"}})
+groups = get_data("editions", {"name": {"$eq": "Python 2024 FINAL"}})
 group = groups[0]
 
 tasks = get_data("tasks", {"edition": {"$eq": group["name"]}})
