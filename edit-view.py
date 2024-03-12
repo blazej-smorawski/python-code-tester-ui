@@ -77,7 +77,7 @@ with col1:
                 task["test-cases"].append(
                     {
                         "input": edited_df["input"][index],
-                        "output": edited_df["output"][index]
+                        "output": edited_df["output"][index],
                         "public": edited_df["public"][index]
                     }
                 )
