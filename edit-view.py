@@ -26,7 +26,7 @@ st.markdown("### Edytor zadań")
 if 'task' not in st.session_state:
     st.session_state['task'] = {
         "name": "Czarna magia",
-        "edition": "Python 2023",
+        "edition": "SANDBOX",
         "initial-code": "print(1)",
         "description": "Magikuj",
         "test-cases": [
@@ -65,41 +65,50 @@ with col1:
                                             task["initial-code"])
         task["description"] = st.text_area('Opis', task["description"])
 
-        df = pd.DataFrame(task["test-cases"])
-        edited_df = st.data_editor(
-            df, num_rows="dynamic", use_container_width=True)
-
-        try:
-            task["test-cases"] = []
-            for index in range(len(edited_df["input"])):
-                task["test-cases"].append(
-                    {
-                        "input": edited_df["input"][index],
-                        "output": edited_df["output"][index],
-                        "public": bool(edited_df["public"][index])
-                    }
-                )
-        except:
-            st.warning("Invalid test cases!")
-
         st.form_submit_button('Zapisz zmiany')
 
-    if st.button("Usuń *_id*", type="secondary"):
+    test_cases = st.container(border=True)
+    with test_cases:
+        config = {
+            'input' : st.column_config.TextColumn('Input'),
+            'output' : st.column_config.TextColumn('Output'),
+            'public' : st.column_config.CheckboxColumn('Public')
+        }
+        st.session_state["new_test_cases"] = st.data_editor(
+            task["test-cases"], key="test_cases_editor", column_config=config, num_rows="dynamic", use_container_width=True)
+
+        def save_test_cases():
+            task["test-cases"] = st.session_state["new_test_cases"]
+
+        st.button("Zapisz zmiany w przypadkach testowych", on_click=save_test_cases)
+
+    if st.button("Usuń *_id*", type="secondary", use_container_width=True):
         if "_id" in task:
             del task["_id"]
 
-    st.markdown("#### Sprawdź zawartość zadania ")
-    st.write(task)
+    check = st.container(border=True)
+    with check:
+        st.markdown("#### Sprawdź zawartość zadania ")
+        st.write(task)
 
-    if st.button("Wyślij", type="primary"):
-        if "_id" in task:
-            del task["_id"]
-        insert_data("tasks", task)
+    if st.button("Wyślij", type="primary", use_container_width=True):
+        try:
+            insert_data("tasks", task, keep_id=True)
+        except Exception as e:
+            st.error(f"Błąd wysyłania zadania: {str(e)}")
+        finally:
+                st.success("Wysyłanie zakończone sukcesem")
 
-    if st.button("Aktualizuj", type="primary"):
+    if st.button("Aktualizuj", type="primary", use_container_width=True):
         if "_id" not in task:
             st.error("Brak wartości **_id**")
-        replace_data("tasks", task)
+        else:
+            try:
+                replace_data("tasks", task)
+            except:
+                st.error("Błąd aktualizacji zadania")
+            finally:
+                st.success("Aktualizacja zakończona sukcesem")
 
 
 with col2:
