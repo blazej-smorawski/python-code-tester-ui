@@ -3,6 +3,7 @@ import json
 import random
 import time
 import streamlit as st
+from streamlit_extras.grid import grid
 from code_editor import code_editor
 from utils.database import get_data, insert_data
 from utils.navbar import display_navbar
@@ -15,8 +16,16 @@ if 'submission' not in st.session_state:
 
 current_submission = st.session_state['submission']
 
-groups = get_data("editions", {"name": {"$eq": "Python 2024 FINAL"}})
-group = groups[0]
+st.markdown("## Wybierz grupę")
+
+grid = grid(3)
+
+groups = get_data(
+    "editions", {"public": {"$eq": False}, "active": {"$eq": True}})
+group_name = grid.selectbox(
+    'Wybierz grupę', [group["name"] for group in groups], label_visibility="collapsed")
+    
+group = next(filter(lambda x: x["name"] == group_name, groups))
 
 start_date = group["start"]
 end_date = group["end"]
@@ -47,7 +56,7 @@ elif start_date <= current_time <= end_date:
 else:
     st.session_state['active'] = False
     st.markdown(
-        f'<div style="text-align: center;"><h3>Edycja Python 2024 dobiegła końca!</h3></div>', unsafe_allow_html=True)
+        f'<div style="text-align: center;"><h3>Edycja {group_name} dobiegła końca!</h3></div>', unsafe_allow_html=True)
 
 if st.session_state['active']:
     tasks = get_data("tasks", {"edition": {"$eq": group["name"]}})
@@ -103,7 +112,7 @@ if st.session_state['active']:
         if st.button("Zgłoś rozwiązanie", use_container_width=True, type="primary"):
             with st.status("Wysyłam rozwiązanie..."):
                 st.write("Sprawdzam zadania...")
-                exam = {}
+                exam = {"name": group_name, "tasks": {}}
                 exam_results = {}
                 for task in filtered_tasks:
                     task_name = task["name"]
@@ -118,7 +127,7 @@ if st.session_state['active']:
 
                     exam_results[task_name] = {
                         "result": passed_count/tests_count, "code": code}
-                    exam[task_name] = task["description"]
+                    exam["tasks"][task_name] = task["description"]
 
                 st.write("Zapisuję wersję konkursu...")
                 # Might not be stable
@@ -129,12 +138,13 @@ if st.session_state['active']:
                 if not exam_in_db:
                     insert_data("exams", {"hash": hash, "exam": exam})
 
-
                 solution_id = random.randint(0, 1e6)
-                submission_with_id = get_data("submissions", {"id": {"$eq": solution_id}})
+                submission_with_id = get_data(
+                    "submissions", {"id": {"$eq": solution_id}})
                 while submission_with_id != []:
                     solution_id = random.randint(0, 1e6)
-                    submission_with_id = get_data("submissions", {"id": {"$eq": solution_id}})
+                    submission_with_id = get_data(
+                        "submissions", {"id": {"$eq": solution_id}})
                     st.write("Szukam wolnego identyfikatora...")
 
                 insert_data("submissions", {
