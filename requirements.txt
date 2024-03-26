@@ -3,3 +3,4 @@ streamlit-extras
 streamlit-code-editor
 pymongo
 pyyaml
+xlsxwriter
