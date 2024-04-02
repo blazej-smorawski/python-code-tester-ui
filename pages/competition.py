@@ -1,3 +1,4 @@
+import copy
 import datetime
 import json
 import time
@@ -14,6 +15,24 @@ if 'submission' not in st.session_state:
     st.session_state['submission'] = {}
 
 current_submission = st.session_state['submission']
+
+_, center, _ = st.columns([1, 4, 1])
+with center:
+    tutorial = st.expander("Instrukcja", expanded=True)
+
+with tutorial:
+    def image_html(path):
+        return f'<img src="{path}" style="max-width: 100%;">'
+    st.markdown(f"""
+                1. Zaczynamy! Wpisz swój kod uczestnika poniżej.
+                2. Teraz czas na rozwiązanie zadań. Możesz je wybierać w dowolnej kolejności. 
+                Pamiętaj o regularnym zapisywaniu swoich postępów za pomocą przycisku `Zapisz rozwiązanie` 
+                przy każdym zadaniu. Dzięki temu będziesz mógł/a uniknąć zgubienia swojej pracy! 📝 {image_html("/app/static/save.jpeg")}
+                3. Gdy już skończysz, kliknij przycisk `Zgłoś rozwiązanie`, aby przesłać swoje zadania. 
+                Nie martw się, możesz wysłać swoje rozwiązania wielokrotnie! 📤 {image_html("/app/static/submit.jpeg")}
+                4. Upewnij się, że przesłane rozwiązanie zawiera wszystkie ostateczne poprawki. 
+                Sprawdź to! 🔍 {image_html("/app/static/check.jpeg")}
+                """, unsafe_allow_html=True)
 
 st.markdown("## Podaj kod uczestnika")
 
@@ -149,6 +168,7 @@ with center:
 
             insert_data("submissions", {
                         "id": token, "exam_hash": hash, "timestamp": datetime.datetime.now(), "exam_results": exam_results})
+            st.session_state['sent_submission'] = copy.deepcopy(current_submission)
             st.session_state['solution_id'] = token
             st.write("Sukces!")
         st.success(
@@ -160,3 +180,9 @@ with center:
             f'<div style="text-align: center;"><h4>Twój kod:</h1></div>', unsafe_allow_html=True)
         st.markdown(
             f'<div style="text-align: center;"><h1>{solution_id}</h1></div>', unsafe_allow_html=True)
+
+        with st.container(border=True):
+            st.markdown("### Sprawdź poprawność wysłanego rozwiązania!")
+            for name, code in st.session_state['sent_submission'].items():
+                st.markdown(f"#### {name}")
+                st.code(code, language="python")
