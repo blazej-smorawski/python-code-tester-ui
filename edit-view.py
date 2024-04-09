@@ -1,11 +1,10 @@
+from datetime import datetime
 import hmac
 from io import BytesIO
 import random
 import string
 import pandas as pd
-from utils.database import get_data, insert_data, replace_data
 from code_editor import code_editor
-from utils.runner import display_testcase_result, test_code
 import yaml
 import json
 import streamlit as st
@@ -15,6 +14,8 @@ st.set_page_config(
     layout="wide"
 )
 
+from utils.database import get_data, insert_data, replace_data
+from utils.runner import display_testcase_result, test_code
 
 # Improve page layout
 hide_streamlit_style = """
@@ -26,6 +27,7 @@ hide_streamlit_style = """
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 st.markdown("### Admin UI")
+
 
 def check_password():
     """Returns `True` if the user had the correct password."""
@@ -50,6 +52,7 @@ def check_password():
         st.error("😕 Password incorrect")
     return False
 
+
 if not check_password():
     st.stop()  # Do not continue if check_password is not True.
 
@@ -70,7 +73,7 @@ if 'task' not in st.session_state:
 
 task = st.session_state.task
 
-tasks, tokens = st.tabs(["Zadania", "Tokeny"])
+tasks, tokens, submissions = st.tabs(["Zadania", "Tokeny", "Zgłoszenia"])
 
 with tasks:
 
@@ -104,9 +107,9 @@ with tasks:
         test_cases = st.container(border=True)
         with test_cases:
             config = {
-                'input' : st.column_config.TextColumn('Input'),
-                'output' : st.column_config.TextColumn('Output'),
-                'public' : st.column_config.CheckboxColumn('Public')
+                'input': st.column_config.TextColumn('Input'),
+                'output': st.column_config.TextColumn('Output'),
+                'public': st.column_config.CheckboxColumn('Public')
             }
             st.session_state["new_test_cases"] = st.data_editor(
                 task["test-cases"], key="test_cases_editor", column_config=config, num_rows="dynamic", use_container_width=True)
@@ -114,7 +117,8 @@ with tasks:
             def save_test_cases():
                 task["test-cases"] = st.session_state["new_test_cases"]
 
-            st.button("Zapisz zmiany w przypadkach testowych", on_click=save_test_cases)
+            st.button("Zapisz zmiany w przypadkach testowych",
+                      on_click=save_test_cases)
 
         if st.button("Usuń *_id*", type="secondary", use_container_width=True):
             if "_id" in task:
@@ -131,7 +135,7 @@ with tasks:
             except Exception as e:
                 st.error(f"Błąd wysyłania zadania: {str(e)}")
             finally:
-                    st.success("Wysyłanie zakończone sukcesem")
+                st.success("Wysyłanie zakończone sukcesem")
 
         if st.button("Aktualizuj", type="primary", use_container_width=True):
             if "_id" not in task:
@@ -143,7 +147,6 @@ with tasks:
                     st.error("Błąd aktualizacji zadania")
                 finally:
                     st.success("Aktualizacja zakończona sukcesem")
-
 
     with col2:
         st.markdown(f"### {task['name']}")
@@ -160,7 +163,8 @@ with tasks:
             "alwaysOn": True
         }]
 
-        task_without_id = json.dumps({i:task[i] for i in task if i!="_id"}, sort_keys=True)
+        task_without_id = json.dumps(
+            {i: task[i] for i in task if i != "_id"}, sort_keys=True)
         editor_response = code_editor(
             code, key=str(hash(task_without_id))+"_editor", height=[10, 20], buttons=editor_buttons)
 
@@ -190,11 +194,11 @@ with tokens:
                 else:
                     st.error("Kolizja tokenów!")
                     ntries += 1
-            
+
             if ntries == max_tries:
                 new_tokens = set()
                 break
-                
+
         return list(new_tokens)
 
     def to_excel(df):
@@ -203,14 +207,15 @@ with tokens:
         df.to_excel(writer, index=False, sheet_name='Sheet1')
         workbook = writer.book
         worksheet = writer.sheets['Sheet1']
-        format1 = workbook.add_format({'num_format': '0.00'}) 
-        worksheet.set_column('A:A', None, format1)  
+        format1 = workbook.add_format({'num_format': '0.00'})
+        worksheet.set_column('A:A', None, format1)
         writer.close()
         processed_data = output.getvalue()
         return processed_data
-    
+
     groups = get_data("editions")
-    group_name = st.selectbox('Wybierz edycję', [group['name'] for group in groups], key="group_selectbox_2", label_visibility="collapsed")
+    group_name = st.selectbox('Wybierz edycję', [
+                              group['name'] for group in groups], key="group_selectbox_2", label_visibility="collapsed")
 
     tokens_count = 0
     tokens_count_string = st.text_input('Liczba tokenów', "0")
@@ -220,7 +225,7 @@ with tokens:
         st.error("Niepoprawna liczba tokenów!")
 
     import pandas as pd
-    
+
     if st.button("Generuj tokeny"):
         existing_entries = get_data("tokens")
         existing_tokens = [x['token'] for x in existing_entries]
@@ -238,13 +243,55 @@ with tokens:
             if 'tokens' in st.session_state:
                 del st.session_state['tokens']
             st.error("Generowanie tokenów nie udało się")
-        
+
     if 'tokens' in st.session_state:
         list = [[x['token'], x['edition']] for x in st.session_state['tokens']]
-        df = pd.DataFrame(data = list, columns = ['Token', 'Edycja'])
+        df = pd.DataFrame(data=list, columns=['Token', 'Edycja'])
 
         df_xlsx = to_excel(df)
         st.download_button(label='📥 Pobierz arkusz z tokenami',
-                                    data=df_xlsx ,
-                                    file_name= 'tokeny.xlsx')
-    
+                           data=df_xlsx,
+                           file_name='tokeny.xlsx')
+
+with submissions:
+    submissions = get_data("submissions")
+
+    # Date input
+    selected_date = st.date_input("Wybierz datę", datetime.today())
+
+    # Filter entries by selected date
+    filtered_entries = [
+        entry for entry in submissions if entry["timestamp"].date() == selected_date]
+
+    # Group entries by ID
+    grouped_entries = {}
+    for entry in filtered_entries:
+        entry_id = entry["id"]
+        if entry_id not in grouped_entries:
+            grouped_entries[entry_id] = []
+        grouped_entries[entry_id].append(entry)
+
+    # Sort entries within each group by timestamp
+    for entry_id, entries_list in grouped_entries.items():
+        entries_list.sort(key=lambda x: x["timestamp"])
+
+    # Create a selectbox to choose an entry ID
+    selected_entry_id = st.selectbox(
+        "Wybierz ID", list(grouped_entries.keys()))
+
+    # Display the selectbox for dates for the selected entry
+    if selected_entry_id in grouped_entries:
+        # Choosing the latest entry for inspection
+        selected_entry = grouped_entries[selected_entry_id][-1]
+        sorted_dates = sorted([entry["timestamp"]
+                              for entry in grouped_entries[selected_entry_id]])
+        selected_date_index = st.selectbox("Wybierz wersję zgłoszenia", range(len(
+            sorted_dates)), format_func=lambda x: sorted_dates[x].strftime('%Y-%m-%d %H:%M:%S'))
+        selected_entry = grouped_entries[selected_entry_id][selected_date_index]
+
+        for key, value in selected_entry["exam_results"].items():
+            result = value["result"]
+            st.markdown(f"### {key} [{result*100:.2f}/100.00]")
+            st.code(value["code"], language="python")
+    else:
+        st.write("Brak zadania.")
