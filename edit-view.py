@@ -1,6 +1,6 @@
 from datetime import datetime
 import hmac
-from io import BytesIO
+from io import BytesIO, StringIO
 import random
 import string
 import pandas as pd
@@ -92,6 +92,22 @@ with tasks:
             st.session_state.task = task
 
         st.button("Załaduj z bazy", on_click=load)
+
+        uploaded_yaml = st.file_uploader("Wczytaj plik `.yaml`")
+        if uploaded_yaml is not None:
+            stringio = StringIO(uploaded_yaml.getvalue().decode("utf-8"))
+            string_data = stringio.read()
+
+            task = yaml.load(string_data, Loader=yaml.FullLoader)
+            st.session_state.task = task
+
+        uploaded_json = st.file_uploader("Wczytaj plik `.json`")
+        if uploaded_json is not None:
+            stringio = StringIO(uploaded_json.getvalue().decode("utf-8"))
+            string_data = stringio.read()
+
+            task = json.loads(string_data)
+            st.session_state.task = task
 
         form = st.form(key="task_editor_form")
 
@@ -245,8 +261,8 @@ with tokens:
             st.error("Generowanie tokenów nie udało się")
 
     if 'tokens' in st.session_state:
-        list = [[x['token'], x['edition']] for x in st.session_state['tokens']]
-        df = pd.DataFrame(data=list, columns=['Token', 'Edycja'])
+        tokens_list = [[x['token'], x['edition']] for x in st.session_state['tokens']]
+        df = pd.DataFrame(data=tokens_list, columns=['Token', 'Edycja'])
 
         df_xlsx = to_excel(df)
         st.download_button(label='📥 Pobierz arkusz z tokenami',
