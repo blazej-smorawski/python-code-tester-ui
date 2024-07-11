@@ -4,7 +4,9 @@ import streamlit as st
 
 
 def run_code(code, stdin):
-    url = 'https://piston-dev.kubernetes.blazej-smorawski.com/api/v2/execute'
+    domain = st.secrets["piston_url"]
+    url = f"{domain}/api/v2/execute"
+
     payload = {
         "language": "python",
         "version": "3.10.0",
