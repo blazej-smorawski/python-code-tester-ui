@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -o pipefail
 
 pushd "deps/pomorski_czarodziej_components"
 
@@ -9,6 +10,7 @@ npm run build
 
 popd
 
-pip install -e .
+# You might want to use pip install -e .
+pip install "$(pwd)"
 
 popd

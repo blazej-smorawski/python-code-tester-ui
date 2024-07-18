@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  streamlit:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: test-code.py
+    environment:
+      no_proxy: piston
+    depends_on:
+      - mongodb
+      - piston
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: pomorski-czarodziej-development
+    volumes:
+      - ./mongo:/docker-entrypoint-initdb.d:ro
+
+  piston:
+    image: ghcr.io/vit3k/piston-python:sha-1c5ceed
+    ports:
+      - "2000:2000"

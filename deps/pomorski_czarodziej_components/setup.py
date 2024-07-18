@@ -1,5 +1,4 @@
 from pathlib import Path
-
 import setuptools
 
 this_directory = Path(__file__).parent
@@ -11,10 +10,10 @@ setuptools.setup(
     author="Błażej Smorawski",
     author_email="blazej.smorawski@gmail.com",
     description="Streamlit custom components used at pomorskiczarodziej.pl",
-    long_description=setuptools.find_packages(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="",
-    packages=["front_page_component"],
+    packages=setuptools.find_packages(),
     package_dir={"deps.pomorski_czarodziej_components": "pomorski_czarodziej_components"},
     include_package_data=True,
     classifiers=[],
