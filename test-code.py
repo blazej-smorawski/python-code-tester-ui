@@ -4,6 +4,8 @@ from code_editor import code_editor
 from utils.frontpage import render_front_page
 from utils.runner import display_run_result, run_code
 from utils.navbar import display_navbar
+from streamlit_extras.grid import grid
+from streamlit_extras.stylable_container import stylable_container
 
 _RELEASE = True
 
@@ -12,6 +14,18 @@ display_navbar()
 _, center, _ = st.columns([1, 5, 1])
 with center:
     render_front_page(_RELEASE)
+    
+    with stylable_container(key="front-page-heading", css_styles="""
+                            {
+                                //text-align: center;
+                                h1 {
+                                    font-size: 100px;
+                                    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+                                }
+                            }
+                            """):
+        st.title("Pomorski Czarodziej 🧙‍♂️")
+
 
     st.markdown(
         "Zapraszamy do korzystania z naszego edytora Python w sekcji '⌨️ Programuj!', gdzie możesz dać upust swojej kreatywności kodowania!")
