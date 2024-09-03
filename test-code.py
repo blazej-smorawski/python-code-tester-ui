@@ -15,37 +15,60 @@ _, center, _ = st.columns([1, 5, 1])
 with center:
     render_front_page(_RELEASE)
     
-    with stylable_container(key="front-page-heading", css_styles="""
-                            {
-                                //text-align: center;
-                                h1 {
-                                    font-size: 100px;
-                                    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-                                }
-                            }
+    left, right = st.columns([4, 6])
+
+    with left:
+        editor_buttons = [{
+            "name": "Generuj stronę!",
+            "feather": "Play",
+            "primary": True,
+            "hasText": True,
+            "showWithIcon": True,
+            "commands": ["submit"],
+            "style": {"bottom": "0.44rem", "right": "0.4rem"},
+            "alwaysOn": True
+        }]
+
+        editor_response = code_editor(
+            "print('# Hello world!🌎')", key="_frontpage_editor", height=[10, 20], buttons=editor_buttons)
+        if editor_response['type'] == "submit":
+            result = run_code(editor_response["text"], "")
+            st.session_state['result_1']=result
+
+    with right:
+        pc = st.get_option('theme.primaryColor')
+        bc = st.get_option('theme.backgroundColor')
+        sbc = st.get_option('theme.secondaryBackgroundColor')
+        tc = st.get_option('theme.textColor')
+        if 'result_1' in st.session_state:
+            with stylable_container(key="generated_page", css_styles=f"""
+                            {{
+                                background-color: {sbc};
+                                z-index: 999;
+                                padding: 10px;
+                                border-style: solid;
+                                border-width: 1px;
+                                border-radius: 5px;
+                                border-color: {pc};
+                                border-radius: 5px;
+                            }}
                             """):
-        st.title("Pomorski Czarodziej 🧙‍♂️")
-
-
-    st.markdown(
-        "Zapraszamy do korzystania z naszego edytora Python w sekcji '⌨️ Programuj!', gdzie możesz dać upust swojej kreatywności kodowania!")
-
-    editor_buttons = [{
-        "name": "Uruchom",
-        "feather": "Play",
-        "primary": True,
-        "hasText": True,
-        "showWithIcon": True,
-        "commands": ["submit"],
-        "style": {"bottom": "0.44rem", "right": "0.4rem"},
-        "alwaysOn": True
-    }]
-    editor_response = code_editor(
-        "print('Hello world!🌎')", key="_frontpage_editor", height=[10, 20], buttons=editor_buttons)
-
-    if editor_response['type'] == "submit":
-        result = run_code(editor_response["text"], "")
-        display_run_result(result)
+                st.markdown(st.session_state['result_1']['output'])
+        else:
+            with stylable_container(key="generated_page", css_styles=f"""
+                            {{
+                                background-color: {sbc};
+                                z-index: 999;
+                                padding: 10px;
+                                border-style: solid;
+                                border-width: 1px;
+                                border-radius: 5px;
+                                border-color: {pc};
+                                border-radius: 5px;
+                                text-align: center;
+                            }}
+                            """):
+                st.markdown("# ???")
 
     st.markdown('''
         ## Regulamin
@@ -58,4 +81,3 @@ with center:
             data=file,
             file_name='Pomorski Czarodziej 2024 - Regulamin.pdf',
             mime='application/pdf')
-    
