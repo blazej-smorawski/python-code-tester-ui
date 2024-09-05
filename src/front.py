@@ -1,13 +1,10 @@
 import streamlit as st
 
 from code_editor import code_editor
-from utils.frontpage import render_front_page
 from utils.runner import display_run_result, run_code
 from utils.navbar import display_navbar
 from streamlit_extras.grid import grid
 from streamlit_extras.stylable_container import stylable_container
-
-_RELEASE = True
 
 pc = st.get_option('theme.primaryColor')
 bc = st.get_option('theme.backgroundColor')
@@ -17,9 +14,7 @@ tc = st.get_option('theme.textColor')
 display_navbar()
 
 _, center, _ = st.columns([1, 5, 1])
-with center:
-    render_front_page(_RELEASE)
-    
+with center:    
     st.title("Hello World! 🌎")
     left, right = st.columns([4, 6])
 
@@ -85,7 +80,7 @@ with center:
                         }}
                         """):
             st.page_link(
-                "pages/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
+                "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
             st.markdown("""
                         Aby ułatwić wam dostęp do programowania, nasza strona udostępnia gotowe środowisko programistyczne języka Python w zakładce **Programuj!**
                         """)
@@ -105,7 +100,7 @@ with center:
                         }}
                         """):
             st.page_link(
-                "pages/training.py", label="Zbiór Zadań", icon="📚", use_container_width=False)
+                "src/training.py", label="Zbiór Zadań", icon="📚", use_container_width=False)
             st.markdown("""
                         Aby ułatwić wam przygotowanie do konkursu, w zakładce **Zbiór Zadań** przygotowaliśmy dla was zadania z poprzednich edycji. Wszystkie zadania są automatycznie sprawdzane przez nasz serwis, więc śmiało możecie sprawdzić swoją wiedzę 🎯.
                         """)
@@ -126,7 +121,7 @@ with center:
                         }}
                         """):
             st.page_link(
-                "pages/competition.py", label="Konkurs", icon="📝", use_container_width=False)
+                "src/competition.py", label="Konkurs", icon="📝", use_container_width=False)
             st.markdown("""
                         W dniu konkursu zakładka **Konkurs** będzie otwarta dla wszystkich chętnych! Po wprowadzeniu identyfikatora otrzymanego od nauczyciela, będziecie mieć godzinę na rozwiązanie kilku zadań podobnych to tych, ze zbioru zadań. Powodzenia!
                         """)

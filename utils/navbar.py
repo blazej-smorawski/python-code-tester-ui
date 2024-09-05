@@ -5,11 +5,6 @@ from streamlit_extras.stylable_container import stylable_container
 
 def display_navbar():
     if not 'config_done' in st.session_state:
-        st.set_page_config(
-            page_title="Pomorski Czarodziej",
-            layout="wide",
-            page_icon="🧙‍♂️"
-        )
         st.session_state['config_done'] = True
 
     # Improve page layout
@@ -46,15 +41,15 @@ def display_navbar():
         with left:
             center = grid(1, vertical_align="center")
             center.page_link(
-                "test-code.py", label="Pomorski Czarodziej", icon="🧙‍♂️", use_container_width=False)
+                "src/front.py", label="Pomorski Czarodziej", icon="🧙‍♂️", use_container_width=False)
         with right:
             navigation_bar = grid(4, vertical_align="center")
             navigation_bar.page_link(
-                "pages/blog.py", label="Aktualności", icon="📰", use_container_width=True)
+                "src/blog.py", label="Aktualności", icon="📰", use_container_width=True)
             navigation_bar.page_link(
-                "pages/training.py", label="Zbiór Zadań", icon="📚", use_container_width=True)
+                "src/training.py", label="Zbiór Zadań", icon="📚", use_container_width=True)
             navigation_bar.page_link(
-                "pages/ide.py", label="Programuj!", icon="⌨️", use_container_width=True)
+                "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=True)
             navigation_bar.page_link(
-                "pages/competition.py", label="Konkurs", icon="📝", use_container_width=True)
+                "src/competition.py", label="Konkurs", icon="📝", use_container_width=True)
     #st.container(height=60, border=False)
