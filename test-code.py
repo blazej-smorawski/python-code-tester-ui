@@ -45,60 +45,91 @@ with center:
         with stylable_container(key="generated_page", css_styles=f"""
                         {{
                             background-color: {sbc};
-                            z-index: 999;
                             padding: 10px;
                             border-style: solid;
                             border-width: 1px;
                             border-radius: 5px;
                             border-color: {pc};
                             border-radius: 5px;
+                            div{{
+                                width:90%;
+                            }}
                         }}
                         """):
             st.markdown("""
-            ### Lorem
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam libero elit, pellentesque eget efficitur sed, bibendum et nulla. Sed faucibus dolor lectus, pretium gravida eros imperdiet in. Duis pretium ac metus sed iaculis. Proin id molestie elit. Curabitur fermentum, leo ut porttitor congue, odio felis rutrum erat, vel tempor sem velit in nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis porta turpis a egestas lobortis. Phasellus interdum neque a ipsum ultrices facilisis. Duis ligula erat, blandit ut convallis sed, vulputate non neque. Curabitur eu malesuada elit. In ac massa at neque placerat dignissim. Vestibulum sed ullamcorper est, vestibulum dignissim augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius ornare lectus in vestibulum.
+            ### Cześć młodzi programiści!👋
+            Zapraszamy Was do świata programowania, gdzie wszystko zaczyna się od magicznego :rainbow[**Hello World**]. To pierwsze kroki, które prowadzą do tworzenia gier, aplikacji i wszystkiego, co tylko sobie wymarzycie. Nasz konkurs to świetna okazja, by spróbować swoich sił i zobaczyć, jakie cuda można wyczarować z kodu. Dołączcie do nas, rozwijając swoje umiejętności, kreatywność i pracę zespołową.
             """)
 
-    st.divider()
-    left, right = st.columns([6, 4])
+    #divider()
+    
+    st.title("Pomorski czarodziej")
+    st.markdown("Nasz konkurs jest skierowany do uczniów szkół podstawowych z pomorza. Wszystkie informacje o tegorocznej edycji możecie znaleźć w zakładce **📰Aktualności**.")
+    
+    #st.divider()
+    left, center, right = st.columns([3, 3, 3])
 
     with left:
         with stylable_container(key="generated_page_2", css_styles=f"""
                         {{
                             background-color: {sbc};
-                            z-index: 999;
                             padding: 10px;
                             border-style: solid;
                             border-width: 1px;
                             border-radius: 5px;
                             border-color: {pc};
                             border-radius: 5px;
+                            div{{
+                                width:90%;
+                            }}
                         }}
                         """):
-            with st.container(height=300, border=False):
-                st.markdown("""
-                ### Hello
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam libero elit, pellentesque eget efficitur sed, bibendum et nulla. Sed faucibus dolor lectus, pretium gravida eros imperdiet in. Duis pretium ac metus sed iaculis. Proin id molestie elit. Curabitur fermentum, leo ut porttitor congue, odio felis rutrum erat, vel tempor sem velit in nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis porta turpis a egestas lobortis. Phasellus interdum neque a ipsum ultrices facilisis. Duis ligula erat, blandit ut convallis sed, vulputate non neque. Curabitur eu malesuada elit. In ac massa at neque placerat dignissim. Vestibulum sed ullamcorper est, vestibulum dignissim augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius ornare lectus in vestibulum.
-                """)
-
-    with right:
-        with stylable_container(key="generated_page_2", css_styles=f"""
+            st.page_link(
+                "pages/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
+            st.markdown("""
+                        Aby ułatwić wam dostęp do programowania, nasza strona udostępnia gotowe środowisko programistyczne języka Python w zakładce **Programuj!**
+                        """)
+    with center:
+        with stylable_container(key="generated_page_3", css_styles=f"""
                         {{
                             background-color: {sbc};
-                            z-index: 999;
                             padding: 10px;
                             border-style: solid;
                             border-width: 1px;
                             border-radius: 5px;
                             border-color: {pc};
                             border-radius: 5px;
+                            div{{
+                                width:90%;
+                            }}
                         }}
                         """):
-            with st.container(height=300, border=False):
-                st.markdown("""
-                ### Tak
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam libero elit, pellentesque eget efficitur sed, bibendum et nulla. Sed faucibus dolor lectus, pretium gravida eros imperdiet in. Duis pretium ac metus sed iaculis. Proin id molestie elit. Curabitur fermentum, leo ut porttitor congue, odio felis rutrum erat, vel tempor sem velit in nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Duis porta turpis a egestas lobortis. Phasellus interdum neque a ipsum ultrices facilisis. Duis ligula erat, blandit ut convallis sed, vulputate non neque. Curabitur eu malesuada elit. In ac massa at neque placerat dignissim. Vestibulum sed ullamcorper est, vestibulum dignissim augue.
-                """)
+            st.page_link(
+                "pages/training.py", label="Zbiór Zadań", icon="📚", use_container_width=False)
+            st.markdown("""
+                        Aby ułatwić wam przygotowanie do konkursu, w zakładce **Zbiór Zadań** przygotowaliśmy dla was zadania z poprzednich edycji. Wszystkie zadania są automatycznie sprawdzane przez nasz serwis, więc śmiało możecie sprawdzić swoją wiedzę 🎯.
+                        """)
+
+    with right:
+        with stylable_container(key="generated_page_4", css_styles=f"""                        
+                        {{
+                            background-color: {sbc};
+                            padding: 10px;
+                            border-style: solid;
+                            border-width: 1px;
+                            border-radius: 5px;
+                            border-color: {pc};
+                            border-radius: 5px;
+                            div{{
+                                width:90%;
+                            }}
+                        }}
+                        """):
+            st.page_link(
+                "pages/competition.py", label="Konkurs", icon="📝", use_container_width=False)
+            st.markdown("""
+                        W dniu konkursu zakładka **Konkurs** będzie otwarta dla wszystkich chętnych! Po wprowadzeniu identyfikatora otrzymanego od nauczyciela, będziecie mieć godzinę na rozwiązanie kilku zadań podobnych to tych, ze zbioru zadań. Powodzenia!
+                        """)
 
     st.markdown('''
         ## Regulamin

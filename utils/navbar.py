@@ -42,13 +42,15 @@ def display_navbar():
                             }}
                             """):
 
-        left, center, right =  st.columns([1,4,3])
+        left, center, right =  st.columns([1,3,3])
         with left:
             center = grid(1, vertical_align="center")
             center.page_link(
                 "test-code.py", label="Pomorski Czarodziej", icon="🧙‍♂️", use_container_width=False)
         with right:
-            navigation_bar = grid(3, vertical_align="center")
+            navigation_bar = grid(4, vertical_align="center")
+            navigation_bar.page_link(
+                "pages/blog.py", label="Aktualności", icon="📰", use_container_width=True)
             navigation_bar.page_link(
                 "pages/training.py", label="Zbiór Zadań", icon="📚", use_container_width=True)
             navigation_bar.page_link(
