@@ -11,12 +11,35 @@ def display_blog(text, links):
     bc = st.get_option('theme.backgroundColor')
     sbc = st.get_option('theme.secondaryBackgroundColor')
     tc = st.get_option('theme.textColor')
-
-    bar, _, blog = st.columns([2, 1 ,10])
-    with bar:
-        with stylable_container(key="blog_links", css_styles=f"""
+    _, center, _ = st.columns([1,3,1])
+    with center:
+        bar, blog = st.columns([3 ,10])
+        with bar:
+            with stylable_container(key="blog_links", css_styles=f"""
+                                {{
+                                    background-color: {sbc};
+                                    padding: 10px;
+                                    border-style: solid;
+                                    border-width: 1px;
+                                    border-radius: 5px;
+                                    border-color: {pc};
+                                    border-radius: 5px;
+                                    div{{
+                                        width:90%;
+                                    }}
+                                }}
+                                """):
+                st.write("### 2024")
+                st.page_link(
+                    "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
+                st.page_link(
+                    "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
+                st.page_link(
+                    "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
+        with blog:
+            with stylable_container(key="blogasddsa", css_styles=f"""
                             {{
-                                background-color: {sbc};
+                                background-color: {sbc}88;
                                 padding: 10px;
                                 border-style: solid;
                                 border-width: 1px;
@@ -28,26 +51,4 @@ def display_blog(text, links):
                                 }}
                             }}
                             """):
-            st.write("### 2024")
-            st.page_link(
-                "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
-            st.page_link(
-                "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
-            st.page_link(
-                "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
-    with blog:
-        with stylable_container(key="blogasddsa", css_styles=f"""
-                        {{
-                            background-color: {sbc};
-                            padding: 10px;
-                            border-style: solid;
-                            border-width: 1px;
-                            border-radius: 5px;
-                            border-color: {pc};
-                            border-radius: 5px;
-                            div{{
-                                width:90%;
-                            }}
-                        }}
-                        """):
-            st.markdown(text)
+                st.markdown(text)
