@@ -6,6 +6,8 @@ from utils.navbar import display_navbar
 from utils.database import get_data
 from streamlit_extras.stylable_container import stylable_container
 
+NAME_TO_DISPLAY = {"src/blogs/blog_17_10_2024.py" : {"title": "Cześć młodzi programiści!", "icon": "👋"}}
+
 def display_blog(text, links):
     display_navbar()
 
@@ -13,7 +15,7 @@ def display_blog(text, links):
     bc = st.get_option('theme.backgroundColor')
     sbc = st.get_option('theme.secondaryBackgroundColor')
     tc = st.get_option('theme.textColor')
-    _, center, _ = st.columns([1,3,1])
+    _, center, _ = st.columns([1,4,1])
     with center:
         bar, blog = st.columns([3 ,10])
         with bar:
@@ -36,7 +38,8 @@ def display_blog(text, links):
                 py_files = glob.glob(os.path.join(directory, '*.py'))
 
                 for file in py_files:
-                    st.page_link(file, label="Programuj!", icon="⌨️", use_container_width=False)
+                    props = NAME_TO_DISPLAY[file]
+                    st.page_link(file, label=f"{props['title']}", icon=f"{props['icon']}", use_container_width=False)
         with blog:
             with stylable_container(key="blogasddsa", css_styles=f"""
                             {{
