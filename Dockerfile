@@ -9,10 +9,10 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-COPY test-code.py /app/test-code.py
-COPY edit-view.py /app/edit-view.py
-COPY mainenance-view.py /app/mainenance-view.py
-COPY pages/* /app/pages/
+COPY app.py /app/app.py
+COPY edit.py /app/edit.py
+COPY mainenance.py /app/mainenance.py
+COPY src/* /app/src/
 COPY requirements.txt /app/requirements.txt
 COPY utils/* /app/utils/
 COPY static/* /app/static/
