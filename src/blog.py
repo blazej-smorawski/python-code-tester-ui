@@ -1,4 +1,6 @@
 
+import os
+import glob
 import streamlit as st
 from utils.navbar import display_navbar
 from utils.database import get_data
@@ -30,12 +32,11 @@ def display_blog(text, links):
                                 }}
                                 """):
                 st.write("### 2024")
-                st.page_link(
-                    "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
-                st.page_link(
-                    "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
-                st.page_link(
-                    "src/ide.py", label="Programuj!", icon="⌨️", use_container_width=False)
+                directory = 'src/blogs/'
+                py_files = glob.glob(os.path.join(directory, '*.py'))
+
+                for file in py_files:
+                    st.page_link(file, label="Programuj!", icon="⌨️", use_container_width=False)
         with blog:
             with stylable_container(key="blogasddsa", css_styles=f"""
                             {{

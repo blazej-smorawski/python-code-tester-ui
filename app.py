@@ -1,5 +1,6 @@
+import os
+import glob
 import streamlit as st
-from src.blog import display_blog
 from utils.database import get_data
 
 pc = st.get_option('theme.primaryColor')
@@ -13,8 +14,6 @@ st.set_page_config(
             page_icon="🧙‍♂️"
         )
 
-blogs = get_data("blog")
-
 static_pages = [
     st.Page("src/front.py", title="Pomorski Czarodziej", icon="🧙‍♂️"),
     st.Page("src/competition.py", title="Konkurs", icon="📝"),
@@ -24,12 +23,12 @@ static_pages = [
 
 index = 0
 dynamic_pages = []
-for blog in blogs:
-    def blog_page():
-            display_blog(f"### {blog['title']}\n\n_{blog['date']}_\n\n{blog['content']}", [{}])
+directory = 'src/blogs/'
+py_files = glob.glob(os.path.join(directory, '*.py'))
 
+for file in py_files:
     dynamic_pages.append(
-        st.Page(blog_page, icon=blog['icon'], url_path=f'/blog{index}')
+        st.Page(file, icon='📰')
     )
 
 static_pages.extend(dynamic_pages)
