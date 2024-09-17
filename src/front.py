@@ -102,7 +102,7 @@ with center:
             st.page_link(
                 "src/training.py", label="Zbiór Zadań", icon="📚", use_container_width=False)
             st.markdown("""
-                        Aby ułatwić wam przygotowanie do konkursu, w zakładce **Zbiór Zadań** przygotowaliśmy dla was zadania z poprzednich edycji. Wszystkie zadania są automatycznie sprawdzane przez nasz serwis, więc śmiało możecie sprawdzić swoją wiedzę 🎯.
+                        Aby ułatwić wam przygotowanie do konkursu, w zakładce **Zbiór Zadań** przygotowaliśmy dla Was zadania z poprzednich edycji. Wszystkie zadania są automatycznie sprawdzane przez nasz serwis, więc śmiało możecie sprawdzić swoją wiedzę 🎯.
                         """)
 
     with right:
