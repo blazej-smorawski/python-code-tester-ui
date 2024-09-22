@@ -1,4 +1,4 @@
-FROM nikolaik/python-nodejs:python3.11-nodejs18-slim
+FROM python:3.9-slim
 
 WORKDIR /app
 
@@ -9,19 +9,16 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-COPY test-code.py /app/test-code.py
-COPY edit-view.py /app/edit-view.py
-COPY mainenance-view.py /app/mainenance-view.py
-COPY pages/* /app/pages/
+COPY app.py /app/app.py
+COPY edit.py /app/edit.py
+COPY mainenance.py /app/mainenance.py
+COPY src/* /app/src/
 COPY requirements.txt /app/requirements.txt
-COPY build_deps.sh /app/build_deps.sh
 COPY utils/* /app/utils/
-COPY deps/ /app/deps/
 COPY static/* /app/static/
 COPY docs/* /app/docs/
 
 RUN pip3 install -r requirements.txt
-RUN ./build_deps.sh
 
 COPY index.html /usr/local/lib/python3.11/site-packages/streamlit/static/index.html
 COPY favicon.png /usr/local/lib/python3.11/site-packages/streamlit/static/favicon.png
