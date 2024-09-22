@@ -13,6 +13,7 @@ COPY app.py /app/app.py
 COPY edit.py /app/edit.py
 COPY mainenance.py /app/mainenance.py
 COPY src/* /app/src/
+COPY src/blogs/* /app/src/blogs/
 COPY requirements.txt /app/requirements.txt
 COPY utils/* /app/utils/
 COPY static/* /app/static/
