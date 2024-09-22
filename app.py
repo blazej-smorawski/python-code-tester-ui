@@ -1,12 +1,6 @@
 import os
 import glob
 import streamlit as st
-from utils.database import get_data
-
-pc = st.get_option('theme.primaryColor')
-bc = st.get_option('theme.backgroundColor')
-sbc = st.get_option('theme.secondaryBackgroundColor')
-tc = st.get_option('theme.textColor')
 
 st.set_page_config(
             page_title="Pomorski Czarodziej",
