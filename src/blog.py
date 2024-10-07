@@ -6,7 +6,8 @@ from utils.navbar import display_navbar
 from utils.database import get_data
 from streamlit_extras.stylable_container import stylable_container
 
-NAME_TO_DISPLAY = {"src/blogs/blog_17_10_2024.py" : {"title": "Cześć młodzi programiści!", "icon": "👋"}}
+NAME_TO_DISPLAY = {"src/blogs/blog_17_10_2024.py" : {"title": "Cześć młodzi programiści!", "icon": "👋"},
+                   "src/blogs/blog_07_10_2024.py" : {"title" : "Zapraszamy na nasz kanał", "icon": "▶️"}}
 
 def display_blog(text, links):
     display_navbar()
@@ -55,4 +56,4 @@ def display_blog(text, links):
                                 }}
                             }}
                             """):
-                st.markdown(text)
+                st.markdown(text, unsafe_allow_html=True)
