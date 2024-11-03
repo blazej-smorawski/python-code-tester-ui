@@ -26,13 +26,13 @@ def get_data(collection: str, query = None):
     return items
 
 def insert_data(collection: str, dict, keep_id=False):
-    db = client["python-konkurs"]
+    db = client[st.secrets["mongo"]["collection"]]
     result = db[collection].insert_one(dict)
     if not keep_id:
         del dict['_id']
     return result.inserted_id
 
 def replace_data(collection: str, dict):
-    db = client["python-konkurs"]
+    db = client[st.secrets["mongo"]["collection"]]
     result = db[collection].replace_one({"_id": dict["_id"]}, dict)
     
