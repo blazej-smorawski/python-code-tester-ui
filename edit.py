@@ -21,7 +21,7 @@ from utils.runner import display_testcase_result, test_code
 hide_streamlit_style = """
 <style>
     #root > div:nth-child(1) > div > div > div > div > section > div {padding-top: 1rem;}
-    #root > div:nth-child(1) > div > div > div > header > div:nth-child(1) {height: 0rem;}
+    #root > div:nth-child(1) > div > div > div > header {height: 0rem;}
 </style>
 
 """
@@ -79,35 +79,43 @@ with tasks:
 
     col1, col2 = st.columns([1, 2])
     with col1:
-        groups = get_data("editions")
-        group_name = st.selectbox(
-            'Wybierz edycję', [group['name'] for group in groups], label_visibility="collapsed")
+        @st.dialog("Wczytaj zadanie")
+        def load_task():
+            groups = get_data("editions")
+            group_name = st.selectbox(
+                'Wybierz edycję', [group['name'] for group in groups], label_visibility="collapsed")
 
-        tasks = get_data("tasks", {"edition": {"$eq": group_name}})
-        task_name = st.selectbox(
-            'Wybierz zadanie', [task["name"] for task in tasks], label_visibility="collapsed")
+            tasks = get_data("tasks", {"edition": {"$eq": group_name}})
+            task_name = st.selectbox(
+                'Wybierz zadanie', [task["name"] for task in tasks], label_visibility="collapsed")
 
-        def load():
-            task = next(filter(lambda x: x["name"] == task_name, tasks))
-            st.session_state.task = task
+            def load():
+                task = next(filter(lambda x: x["name"] == task_name, tasks))
+                st.session_state.task = task
 
-        st.button("Załaduj z bazy", on_click=load)
+            if st.button("Załaduj z bazy", on_click=load):
+                st.rerun()
 
-        uploaded_yaml = st.file_uploader("Wczytaj plik `.yaml`")
-        if uploaded_yaml is not None:
-            stringio = StringIO(uploaded_yaml.getvalue().decode("utf-8"))
-            string_data = stringio.read()
+            uploaded_yaml = st.file_uploader("Wczytaj plik `.yaml`")
+            if uploaded_yaml is not None:
+                stringio = StringIO(uploaded_yaml.getvalue().decode("utf-8"))
+                string_data = stringio.read()
 
-            task = yaml.load(string_data, Loader=yaml.FullLoader)
-            st.session_state.task = task
+                task = yaml.load(string_data, Loader=yaml.FullLoader)
+                st.session_state.task = task
+                st.rerun()
 
-        uploaded_json = st.file_uploader("Wczytaj plik `.json`")
-        if uploaded_json is not None:
-            stringio = StringIO(uploaded_json.getvalue().decode("utf-8"))
-            string_data = stringio.read()
+            uploaded_json = st.file_uploader("Wczytaj plik `.json`")
+            if uploaded_json is not None:
+                stringio = StringIO(uploaded_json.getvalue().decode("utf-8"))
+                string_data = stringio.read()
 
-            task = json.loads(string_data)
-            st.session_state.task = task
+                task = json.loads(string_data)
+                st.session_state.task = task
+                st.rerun()
+
+        if st.button("Wczytaj zadanie"):
+            load_task()
 
         form = st.form(key="task_editor_form")
 
