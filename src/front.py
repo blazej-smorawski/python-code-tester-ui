@@ -128,7 +128,7 @@ with center:
         Regulamin konkursu na rok 2024 możecie pobrać, klikając w poniższy przycisk.
     ''')
 
-    with open("docs/Pomorski Czarodziej 2024 - Regulamin.pdf", "rb") as file:
+    with open("docs/Pomorski Czarodziej 2025 - Regulamin.pdf", "rb") as file:
         st.download_button(
             label="Regulamin konkursu",
             data=file,
