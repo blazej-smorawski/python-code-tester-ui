@@ -21,8 +21,8 @@ COPY docs/* /app/docs/
 
 RUN pip3 install -r requirements.txt
 
-COPY index.html /usr/local/lib/python3.11/site-packages/streamlit/static/index.html
-COPY favicon.png /usr/local/lib/python3.11/site-packages/streamlit/static/favicon.png
+COPY index.html /usr/local/lib/python3.9/site-packages/streamlit/static/index.html
+COPY favicon.png /usr/local/lib/python3.9/site-packages/streamlit/static/favicon.png
 
 EXPOSE 8501
 
