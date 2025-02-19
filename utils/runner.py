@@ -41,7 +41,7 @@ def test_code(task, code, private=False):
             stdin = testcase["input"].replace('\\n', '\n')
             result = run_code(code, stdin)
 
-            if result['code'] == 0 and re.match(testcase["output"].replace('\\n', '\n'), result['output']):
+            if result['code'] == 0 and re.match(str(testcase["output"]).replace('\\n', '\n'), result['output']):
                 results.append(
                     {"passed": True, **result})
             else:
