@@ -138,7 +138,24 @@ with tasks:
             st.session_state["new_test_cases"] = st.data_editor(
                 task["test-cases"], key="test_cases_editor", column_config=config, num_rows="dynamic", use_container_width=True)
 
+            def validate_dataframe(df):
+                for index, row in df.iterrows():
+                    # Validate and cast 'input' to string
+                    if not isinstance(row['input'], str):
+                        df.at[index, 'input'] = str(row['input']) if row['input'] is not None else ""
+
+                    # Validate and cast 'output' to string
+                    if not isinstance(row['output'], str):
+                        df.at[index, 'output'] = str(row['output']) if row['output'] is not None else ""
+
+                    # Validate and cast 'public' to boolean
+                    if row['public'] is None or str(row['public']).lower() == "false":
+                        df.at[index, 'public'] = False
+                    else:
+                        df.at[index, 'public'] = bool(row['public'])
+
             def save_test_cases():
+                validate_dataframe(st.session_state["new_test_cases"])
                 task["test-cases"] = st.session_state["new_test_cases"]
 
             st.button("Zapisz zmiany w przypadkach testowych",
