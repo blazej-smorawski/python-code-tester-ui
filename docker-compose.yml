@@ -15,6 +15,20 @@ services:
       - mongodb
       - piston
 
+  admin:
+    build: .
+    ports:
+      - "8502:8501"
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: edit.py
+    environment:
+      no_proxy: piston
+    depends_on:
+      - mongodb
+      - piston
+
   mongodb:
     image: mongo:latest
     ports:
