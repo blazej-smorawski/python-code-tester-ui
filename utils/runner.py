@@ -7,6 +7,9 @@ def run_code(code, stdin):
     domain = st.secrets["piston_url"]
     url = f"{domain}/api/v2/execute"
 
+    wait = st.empty()
+    wait.write("Wykonywanie programu. Proszę czekać...")
+
     payload = {
         "language": "python",
         "version": "3.10.0",
@@ -24,6 +27,7 @@ def run_code(code, stdin):
         return {"input": stdin, "output": "", "error": "Awaria serwisu `pomorskiczarodziej.pl`", "code": -1}
 
     result = req.json()
+    wait.empty()
 
     return {"input": stdin, "output": result['run']['stdout'], "error": result['run']['stderr'], "code": result['run']['code']}
 
