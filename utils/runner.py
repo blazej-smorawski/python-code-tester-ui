@@ -1,7 +1,10 @@
 import re
 import requests
 import streamlit as st
+from time import time
 
+# for rate limiting
+prev_requests_times = []
 
 def run_code(code, stdin):
     domain = st.secrets["piston_url"]
@@ -21,6 +24,15 @@ def run_code(code, stdin):
         ],
         "stdin": stdin
     }
+
+    # rate limit (max 5 requests / 5 seconds)
+    prev_requests_times.append(int(time()))
+    while prev_requests_times[0] < int(time()) - 5:
+        prev_requests_times.pop(0)
+    if len(prev_requests_times) >= 5:
+        wait.empty()
+        return {"input": stdin, "output": "", "error": "Wysyłasz za dużo informacji. Zwojnij!", "code": -1}
+
     req = requests.post(url, json=payload)
 
     if req.status_code != 200:
