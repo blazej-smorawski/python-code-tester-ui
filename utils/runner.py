@@ -27,7 +27,10 @@ def run_code(code, stdin):
         return {"input": stdin, "output": "", "error": "Awaria serwisu `pomorskiczarodziej.pl`", "code": -1}
 
     result = req.json()
+
     wait.empty()
+    if result['run']['signal'] == "SIGKILL":
+        return {"input": stdin, "output": "", "error": "Nieodpowiedni kod (niebezpieczny lub za długi do wykonania)", "code": -1}
 
     return {"input": stdin, "output": result['run']['stdout'], "error": result['run']['stderr'], "code": result['run']['code']}
 
