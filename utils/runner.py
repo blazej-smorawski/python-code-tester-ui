@@ -5,8 +5,11 @@ from time import time
 
 # for rate limiting
 prev_requests_times = []
+running_counter = 0
+
 
 def run_code(code, stdin):
+    global running_counter
     domain = st.secrets["piston_url"]
     url = f"{domain}/api/v2/execute"
 
@@ -33,7 +36,13 @@ def run_code(code, stdin):
         wait.empty()
         return {"input": stdin, "output": "", "error": "Wysyłasz za dużo informacji. Zwojnij!", "code": -1}
 
+    if running_counter > 3:
+        return {"input": stdin, "output": "", "error": "Wysyłasz za dużo informacji. Zwojnij!", "code": -1}
+    running_counter += 1
+
     req = requests.post(url, json=payload)
+
+    running_counter -= 1
 
     if req.status_code != 200:
         return {"input": stdin, "output": "", "error": "Awaria serwisu `pomorskiczarodziej.pl`", "code": -1}
