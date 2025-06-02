@@ -32,12 +32,10 @@ def run_code(code, stdin):
     prev_requests_times.append(int(time()))
     while prev_requests_times[0] < int(time()) - 5:
         prev_requests_times.pop(0)
-    if len(prev_requests_times) >= 5:
-        wait.empty()
+
+    if len(prev_requests_times) >= 5 or running_counter > 3:
         return {"input": stdin, "output": "", "error": "Wysyłasz za dużo informacji. Zwojnij!", "code": -1}
 
-    if running_counter > 3:
-        return {"input": stdin, "output": "", "error": "Wysyłasz za dużo informacji. Zwojnij!", "code": -1}
     running_counter += 1
 
     req = requests.post(url, json=payload)
@@ -49,7 +47,9 @@ def run_code(code, stdin):
 
     result = req.json()
 
-    wait.empty()
+    if running_counter == 0:
+        wait.empty()
+
     if result['run']['signal'] == "SIGKILL":
         return {"input": stdin, "output": "", "error": "Nieodpowiedni kod (niebezpieczny lub za długi do wykonania)", "code": -1}
 
