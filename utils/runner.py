@@ -1,11 +1,20 @@
 import re
 import requests
 import streamlit as st
+from time import time
+
+# for rate limiting
+prev_requests_times = []
+running_counter = 0
 
 
 def run_code(code, stdin):
+    global running_counter
     domain = st.secrets["piston_url"]
     url = f"{domain}/api/v2/execute"
+
+    wait = st.empty()
+    wait.write("Wykonywanie programu. Proszę czekać...")
 
     payload = {
         "language": "python",
@@ -18,12 +27,31 @@ def run_code(code, stdin):
         ],
         "stdin": stdin
     }
+
+    # rate limit (max 5 requests / 5 seconds)
+    prev_requests_times.append(int(time()))
+    while prev_requests_times[0] < int(time()) - 5:
+        prev_requests_times.pop(0)
+
+    if len(prev_requests_times) >= 5 or running_counter > 3:
+        return {"input": stdin, "output": "", "error": "Wysyłasz za dużo informacji. Zwojnij!", "code": -1}
+
+    running_counter += 1
+
     req = requests.post(url, json=payload)
+
+    running_counter -= 1
 
     if req.status_code != 200:
         return {"input": stdin, "output": "", "error": "Awaria serwisu `pomorskiczarodziej.pl`", "code": -1}
 
     result = req.json()
+
+    if running_counter == 0:
+        wait.empty()
+
+    if result['run']['signal'] == "SIGKILL":
+        return {"input": stdin, "output": "", "error": "Nieodpowiedni kod (niebezpieczny lub za długi do wykonania)", "code": -1}
 
     return {"input": stdin, "output": result['run']['stdout'], "error": result['run']['stderr'], "code": result['run']['code']}
 

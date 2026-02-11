@@ -37,11 +37,12 @@ def display_navbar():
                             }}
                             """):
 
-        left, center, right =  st.columns([1,3,3])
+        left, center, right =  st.columns([4,1,6])
         with left:
-            center = grid(1, vertical_align="center")
+            center = grid(2, vertical_align="center")
             center.page_link(
-                "src/front.py", label="Pomorski Czarodziej", icon="🧙‍♂️", use_container_width=False)
+                "src/front.py", label="Pomorski Czarodziej", icon="🧙‍♂️", use_container_width=True)
+            center.markdown("<a href=\"https://github.com/blazej-smorawski/python-code-tester-ui\"><img width=20 src=\"/app/static/github.png\"></a>", unsafe_allow_html=True)
         with right:
             navigation_bar = grid(4, vertical_align="center")
             navigation_bar.page_link(

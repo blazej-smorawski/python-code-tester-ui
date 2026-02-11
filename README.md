@@ -4,15 +4,9 @@ Simple frontend for hosting python programming competitions.
 
 ### Usage
 
+The best way to use python-code-tester-ui is by using docker:
 ```bash
-pip install -r requirements.txt
-python -m streamlit run test-code.py
-```
-
-Alternatively, you can run the code in a container:
-
-```bash
-docker run -p8501:8501 -v$(pwd)/.streamlit:/app/.streamlit docker.io/library/python-code-tester-ui:latest test-code.py
+docker compose up
 ```
 
 ### Workarounds
