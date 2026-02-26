@@ -16,7 +16,6 @@ COPY src/blogs/* /app/src/blogs/
 COPY requirements.txt /app/requirements.txt
 COPY utils/* /app/utils/
 COPY static/* /app/static/
-COPY docs/* /app/docs/
 
 RUN pip3 install -r requirements.txt
 
