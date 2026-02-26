@@ -25,9 +25,9 @@ Nasz serwis to kompletny ekosystem, w którym możecie doskonalić swoje umieję
 
 Nasz konkurs jest skierowany do uczniów szkół podstawowych z Pomorza. Wszystkie aktualności i informacje o tegorocznej edycji znajdziecie w zakładce 📰 *Aktualności* na naszej stronie.
 
-Pełen regulamin konkursu na rok 2024 możecie pobrać, klikając w przycisk poniżej. Zapoznajcie się z nim dokładnie, aby wiedzieć, jak najlepiej przygotować się do udziału.
+Pełen regulamin konkursu na rok 2024 możecie pobrać, klikając w przycisk na stronie głównej. Zapoznajcie się z nim dokładnie, aby wiedzieć, jak najlepiej przygotować się do udziału.
 
-Zapraszamy Was do świata programowania – zacznijcie od prostego „Hello World!” i zobaczcie, dokąd Was to zaprowadzi. Czekamy na Wasze kreatywne rozwiązania i nie możemy się doczekać, by zobaczyć, jakie cuda stworzycie za pomocą Pythona!
+Zapraszamy Was do świata programowania - zacznijcie od prostego „Hello World!” i zobaczcie, dokąd Was to zaprowadzi. Czekamy na Wasze kreatywne rozwiązania i nie możemy się doczekać, by zobaczyć, jakie cuda stworzycie za pomocą Pythona!
 
 #### Do zobaczenia na konkursie i powodzenia! 🎉
 """

@@ -45,7 +45,7 @@ def display_navbar():
         with right:
             navigation_bar = grid(4, vertical_align="center")
             navigation_bar.page_link(
-                "src/blogs/blog_17_10_2024.py", label="Aktualności", icon="📰", use_container_width=True)
+                "src/blogs/blog_26_02_2026.py", label="Aktualności 🔴", icon="📰", use_container_width=True)
             navigation_bar.page_link(
                 "src/training.py", label="Zbiór Zadań", icon="📚", use_container_width=True)
             navigation_bar.page_link(
