@@ -128,7 +128,7 @@ with center:
         Regulamin konkursu na rok 2026 możecie pobrać, klikając w poniższy przycisk.
     ''')
 
-    with open("docs/Pomorski Czarodziej 2026 - Regulamin.pdf", "rb") as file:
+    with open("static/Pomorski-Czarodziej-2026-Regulamin.pdf", "rb") as file:
         st.download_button(
             label="Regulamin konkursu",
             data=file,

@@ -16,7 +16,7 @@ Etap Rejonowy: 13.04-26.04
 Etap Wojewódzki: 18-22.05
 
 
-Link do regulaminu : [Regulamin konkursu 📝](https://pomorskiczarodziej.pl/media/79ac6dd497b7e891bb989f0332292c5bbbbbdc49d64ec00e39415827.pdf)
+Link do regulaminu : [Regulamin konkursu 📝](./app/static/Pomorski-Czarodziej-2026-Regulamin.pdf)
 
 Zgłoszenia na adres: [pomorski.czarodziej@intel.com](mailto:pomorski.czarodziej@intel.com)
 """
