@@ -36,11 +36,14 @@ with center:
     with one:
         st.markdown(tips.tip_variables())
         st.markdown(tips.tip_maths())
+        st.markdown(tips.tip_ascii_conversion())
 
     with two:
         st.markdown(tips.tip_lists())
         st.markdown(tips.tip_loops())
+        st.markdown(tips.tip_dictionaries())
 
     with three:
         st.markdown(tips.tip_ifs())
         st.markdown(tips.tip_functions())
+        st.markdown(tips.tip_custom_print())
