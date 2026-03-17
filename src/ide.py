@@ -42,6 +42,7 @@ with center:
         st.markdown(tips.tip_lists())
         st.markdown(tips.tip_loops())
         st.markdown(tips.tip_dictionaries())
+        st.markdown(tips.tip_type_conversions())
 
     with three:
         st.markdown(tips.tip_ifs())
